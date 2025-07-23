@@ -1,11 +1,8 @@
 package main;
-
 import models.FullTimeEmployee;
 import models.PartTimeEmployee;
 import interfaces.Taxable;
 import java.util.*;
-
-
 public class Main {
     public static void main(String[] args){
         List<Taxable> employees=new ArrayList<>();
