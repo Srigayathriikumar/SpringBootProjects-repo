@@ -1,5 +1,5 @@
 # Ticket Resolving Java Application – Phase 2
-
+## Enhanced Project with User Management 
 This is Phase 2 of the Ticket Resolving Java Application project, expanding on the original implementation by introducing service-based architecture and improved data handling.
 
 ### What's New in Phase 2
