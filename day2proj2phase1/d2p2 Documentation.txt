@@ -1,0 +1,181 @@
+A project Design and implement a console-based mini Helpdesk Ticketing System, following object-oriented design principles.
+
+  FILE STRUCTURE:
+
+day2proj2phase1/
+│
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── com/
+│   │           └── day2proj2phase1/
+│   │               ├── App.java
+│   │               ├── Ticket.java
+│   │               └── User.java
+│   │
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── day2proj2phase1/
+│                   └── AppTest.java
+│
+├── target/                    # (Typically contains compiled code and build output)
+│
+├── .gitignore
+├── pom.xml                   # Maven project configuration file
+└── Readme.md
+
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  CODE:
+
+1. App.java
+
+  package com.day2proj2phase1;
+public class App{
+    public static void main(String[] args){
+       User usr1=new User(123,"john","john123@gmail.com");
+       User usr2=new User(124,"lily","lily124@gmail.com");
+        Ticket tct1=new Ticket(001,"wrong transaction","assingned to emp4",usr1);
+        Ticket tct2=new Ticket(002,"user access request","assigned to emp1",usr2);
+        Ticket tct3=new Ticket(003,"balance checking","assigned to emp3",usr1);
+        tct2.closeticket(tct2.getticketId());
+        tct1.displayticketdetails();
+        tct2.displayticketdetails();
+        tct3.displayticketdetails();
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. Ticket.java
+
+  package com.day2proj2phase1;
+
+public class Ticket {
+    //properties
+    private int ticketid;
+    private String title;
+    private String description;
+    private String status;
+    private User user;
+
+    //constructor
+    public Ticket(int ticketid,String title,String description,User user){
+        this.ticketid=ticketid;
+        this.title=title;
+        this.description=description;
+        this.status="Open";
+        this.user=user;
+
+    }
+
+    public int getticketId(){
+        return ticketid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void displayticketdetails(){
+        System.out.println("Ticket details");
+        System.out.println("ticket id: "+ticketid);
+        System.out.println("ticket title: "+title);
+        System.out.println("ticket description: "+description);
+        System.out.println("ticket status: "+status);
+        System.out.println();
+        user.displayuserdetails();
+        System.out.println();
+
+    }
+
+    public void closeticket(int ticketid){
+            this.status="Closed";
+            System.out.println("Ticket "+ticketid+" closed Successfully\n");
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3. User.java
+
+  package com.day2proj2phase1;
+
+public class User {
+  public int userid;
+  public String username;
+  public String useremail;
+  
+  public User(int userid,String username,String useremail){
+    this.userid=userid;
+    this.username=username;
+    this.useremail=useremail;
+  }
+
+  public int getUserid() {
+    return userid;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public String getUseremail() {
+    return useremail;
+  }
+  public void displayuserdetails(){
+        System.out.println("User details");
+        System.out.println("user id: "+userid);
+        System.out.println("user name: "+username);
+        System.out.println("user email: "+useremail);
+        System.out.println("------------------");
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SAMPLE OUTPUT:
+
+Ticket 2 closed Successfully
+
+Ticket details
+ticket id: 1
+ticket title: wrong transaction
+ticket description: assingned to emp4
+ticket status: Open
+
+User details
+user id: 123
+user name: john
+user email: john123@gmail.com
+------------------
+
+Ticket details
+ticket id: 2
+ticket title: user access request
+ticket description: assigned to emp1
+ticket status: Closed
+
+User details
+user id: 124
+user name: lily
+user email: lily124@gmail.com
+------------------
+
+Ticket details
+ticket id: 3
+ticket title: balance checking
+ticket description: assigned to emp3
+ticket status: Open
+
+User details
+user id: 123
+user name: john
+user email: john123@gmail.com
+------------------
