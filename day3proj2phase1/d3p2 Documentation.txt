@@ -1,0 +1,200 @@
+THE FILE STRUCTURE OF ISSUE TRACKER SYSTEM USING SPRINGBOOT
+
+day3proj2phase1/
+│
+├── Readme.md
+├── pom.xml
+└── src/
+    └── main/
+        └── java/
+            ├── main/
+            │   └── IssueTrackerApplication.java
+            ├── models/
+            │   ├── Issue.java
+            │   ├── Bugs.java
+            │   └── Task.java
+            └── interfaces/
+                └── Reportable.java
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CODE:
+
+1. main/IssueTrackerApplication.java
+
+package main;
+import java.util.*;
+import models.*;
+import interfaces.Reportable;
+public class IssueTrackerApplication {
+    public static void main(String[] args){
+    List<Issue> issues = new ArrayList<>();
+        issues.add(new Task("T001", "Fix Bug", "There is a bug in the application", "Alice", "2023-10-15"));
+        issues.add(new Task("T002", "Implement Feature", "New feature implementation required", "Bob", "2023-10-20"));
+        issues.add(new Bugs("B001", "Critical Bug", "Application crashes on startup", "High", "Open"));
+        issues.add(new Bugs("B002", "Minor Bug", "UI misalignment on homepage", "Low", "Closed"));
+        for (Issue issue : issues) {
+            issue.displayissuedetails();
+             if (issue instanceof Reportable) {
+                Reportable reportable = (Reportable) issue;
+                reportable.reportStatus();               
+            }
+        }
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. models/Issue.java
+
+package models;
+
+public abstract class Issue {
+    public String issueid;
+    public String issuetitle;
+    public String issuedesc;
+    public Issue(String issueid, String issuetitle, String issuedesc) {
+        this.issueid = issueid;
+        this.issuetitle = issuetitle;
+        this.issuedesc = issuedesc;
+    }
+    public String getIssueid() {
+        return issueid;
+    }
+    public String getIssuetitle() {
+        return issuetitle;
+    }
+    public String getIssuedesc() {
+        return issuedesc;
+    }
+    public abstract void displayissuedetails();
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3. models/Bugs.java
+
+package models;
+import interfaces.Reportable;
+public class Bugs extends Issue implements Reportable {
+    public String priority;
+    public String status;
+    public Bugs(String issueid, String issuetitle, String issuedesc, String priority, String status) {
+        super(issueid, issuetitle, issuedesc);
+        this.priority = priority;
+        this.status = status;
+    }
+    public String getPriority() {
+        return priority;
+    }
+    public String getStatus() {
+        return status;
+    }
+    @Override
+    public void displayissuedetails(){
+        System.out.println("Bug Issue ID: " + getIssueid());
+        System.out.println("Title: " + getIssuetitle());
+        System.out.println("Description: " + getIssuedesc());
+        System.out.println("Priority: " + getPriority());
+        System.out.println("Status: " + getStatus());
+        System.out.println();
+    }
+    @Override
+    public void reportissue(){
+        System.out.println("Reporting Bug ID " + getIssueid() + "has Priority NO" + getPriority() + ". The present Status of this bug is " + getStatus());
+        System.out.println();
+    }
+
+    @Override
+    public void reportStatus() {
+        System.out.println("Bug Status: " + getStatus());
+    }
+    
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. models/Task.java
+
+package models;
+import interfaces.Reportable;
+public class Task extends Issue implements Reportable {
+    public String assignee;
+    public String dueDate;
+
+    public Task(String issueid, String issuetitle, String issuedesc, String assignee, String dueDate) {
+        super(issueid, issuetitle, issuedesc);
+        this.assignee = assignee;
+        this.dueDate = dueDate;
+}
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    @Override
+    public void displayissuedetails() {
+        System.out.println("Task Issue ID: " + getIssueid());
+        System.out.println("Title: " + getIssuetitle());
+        System.out.println("Description: " + getIssuedesc());
+        System.out.println("Assignee: " + getAssignee());
+        System.out.println("Due Date: " + getDueDate());
+        System.out.println();
+    }
+
+    @Override
+    public void reportissue() {
+        System.out.println("Reporting Task ID " + getIssueid() + " assigned to " + getAssignee() + ". Due on " + getDueDate());
+        System.out.println();
+    }
+
+    @Override
+    public void reportStatus() {
+        System.out.println("Status of Task ID " + getIssueid() + ": Assigned to " + getAssignee() + ", Due on " + getDueDate());
+        System.out.println();
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5. interfaces/Reportable.java
+
+package interfaces;
+
+public interface Reportable {
+    public void reportissue();
+
+    public void reportStatus();
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SAMPLE OUTPUT:
+
+Task Issue ID: T001
+Title: Fix Bug
+Description: There is a bug in the application
+Assignee: Alice
+Due Date: 2023-10-15
+
+Status of Task ID T001: Assigned to Alice, Due on 2023-10-15
+
+Task Issue ID: T002
+Title: Implement Feature
+Description: New feature implementation required
+Assignee: Bob
+Due Date: 2023-10-20
+
+Status of Task ID T002: Assigned to Bob, Due on 2023-10-20
+
+Bug Issue ID: B001
+Title: Critical Bug
+Description: Application crashes on startup
+Priority: High
+Status: Open
+
+Bug Status: Open
+Bug Issue ID: B002
+Title: Minor Bug
+Description: UI misalignment on homepage
+Priority: Low
+Status: Closed
+
+Bug Status: Closed
+
