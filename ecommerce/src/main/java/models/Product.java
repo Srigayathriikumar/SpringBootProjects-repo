@@ -41,6 +41,5 @@ public class Product extends Stocks {
         System.out.println("Product ID: " + getProductid());
         System.out.println("Product Name: " + getProductname());
         System.out.println("Price: " + getPrice());
-        System.out.println("Stock: " + getStock());
     }
 }

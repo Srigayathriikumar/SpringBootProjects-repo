@@ -44,15 +44,21 @@ public class Main {
             int productId = s.nextInt();    
             Product selectedProduct = null;
             for (Product prod : prodlist) { 
+                if(prod.getStock() <= 0) {
+                    System.out.println("Product " + prod.getProductname() + " is out of stock.");   
+                }
+                else{
                 if (prod.getProductid() == productId) {
                     selectedProduct = prod;
                     break;
                 }
             }
+            }
             if (selectedProduct != null) {
                 System.out.println("Product " + selectedProduct.getProductname() + " added to cart.");
                 purchaselist.add(selectedProduct);
-            } else {
+            } 
+            if(selectedProduct == null) {
                 System.out.println("Product not found.");
             }
             System.out.println("--------------------");
@@ -79,8 +85,13 @@ public class Main {
                 } else {
                     for (Product purchase : purchaselist) {
                         try {
+                            if (purchase.getStock() <= 0) {
+                                throw new MissingCustomerAddress("Product " + purchase.getProductname() + " is out of stock.");
+                            }
                             productservice.checkdetails(purchase);
+                            System.out.println("===============");
                             purchase.stockupdate();
+                            System.out.println("==============");
                             purchase.displaydetails();
                         } catch (MissingCustomerAddress e) {
                             System.out.println(e.getMessage());
@@ -105,7 +116,7 @@ public class Main {
                 System.out.println("Enter your address:");
                 String address = s.next();
                 userlist.add(new Purchase(custname, custemail, address));
-                System.out.println("Name: "+custname+" Email: "+custemail+" Address: "+address+" User details added successfully.");
+                System.out.println("Name: "+custname+"|| Email: "+custemail+"|| Address: "+address+"|| User details added successfully.");
                 break;
                 
                 default:
