@@ -14,16 +14,15 @@ public class Main {
 
         prodlist.add(new Product("Laptop",80000,10));
         prodlist.add(new Product("Waterbottle",30000,5));
-        prodlist.add(new Product("shoes",2000,0));
+        prodlist.add(new Product("shoes",2000,7));
         prodlist.add(new Product("Smartwatch",15000,3));
         prodlist.add(new Product("Umbrella",25000,8));
 
         boolean exit=true;
         List<Product> purchaselist = new ArrayList<>();
         while(exit){
-        System.out.println("Choose your Option:\n1.Enter User Details\n2.Veiw Available Products\n3.Add Product to Cart\n4.View Cart\n5.Checkout\n6.Exit\n");
+        System.out.println("\nE-COMMERCE APPLICATION\nChoose your Option:\n1.Enter User Details\n2.Veiw Available Products\n3.Add Product to Cart\n4.View Cart\n5.Checkout\n6.Exit\n");
         int choice=s.nextInt();
-
         switch (choice) {
             case 2:
             System.out.println("Available Products:");
@@ -45,7 +44,8 @@ public class Main {
             Product selectedProduct = null;
             for (Product prod : prodlist) { 
                 if(prod.getStock() <= 0) {
-                    System.out.println("Product " + prod.getProductname() + " is out of stock.");   
+                    System.out.println("Product " + prod.getProductname() + " is out of stock."); 
+                    break; 
                 }
                 else{
                 if (prod.getProductid() == productId) {
@@ -110,13 +110,14 @@ public class Main {
 
                 case 1:
                 System.out.println("Enter your name:");
-                String custname = s.next(); 
+                String custname = s.nextLine(); 
+                s.nextLine(); // Consume the newline character
                 System.out.println("Enter your email:");
-                String custemail = s.next();
+                String custemail = s.nextLine();
                 System.out.println("Enter your address:");
-                String address = s.next();
+                String address = s.nextLine();
                 userlist.add(new Purchase(custname, custemail, address));
-                System.out.println("Name: "+custname+"|| Email: "+custemail+"|| Address: "+address+"|| User details added successfully.");
+                System.out.println("Name: "+custname+"|| Email: "+custemail+"|| Address: "+address+"|| User details added successfully.\n");
                 break;
                 
                 default:
