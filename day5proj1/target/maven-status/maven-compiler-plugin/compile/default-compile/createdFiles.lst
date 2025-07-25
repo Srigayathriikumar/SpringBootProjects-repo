@@ -1,0 +1,5 @@
+com\jdbcconnections\App.class
+com\jdbcconnections\util\DBUtil.class
+com\jdbcconnections\main\Main.class
+com\jdbcconnections\dao\BugDAO.class
+com\jdbcconnections\models\Bug.class
