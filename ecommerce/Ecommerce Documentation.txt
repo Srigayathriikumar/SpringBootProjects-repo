@@ -1,0 +1,181 @@
+## File Structure
+
+ecommerce/
+├── src/
+│ └── main/
+│ └── java/
+│ └── com/
+│ ├── exceptions/
+│ │ └── MissingCustomerAddress.java
+│ ├── interfaces/
+│ │ └── ReportIssue.java
+│ ├── main/
+│ │ └── Main.java
+│ ├── models/
+│ │ ├── Product.java
+│ │ ├── Purchase.java
+│ │ └── Stocks.java
+│ └── services/
+│ └── ProductService.java
+├── test/
+├── target/
+└── pom.xml
+
+===================================================================================================================================================================
+
+
+SAMPLE OUTPUT:
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+1
+Enter your name:
+William
+Enter your email:
+william@gmail.com
+Enter your address:
+122,parksteet,Paris
+Name: || Email: william@gmail.com|| Address: 122,parksteet,Paris|| User details added successfully.
+
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+2
+Available Products:
+Product ID: 100
+Product Name: Laptop
+Price: 80000.0
+Stock: 10
+
+Product ID: 101
+Product Name: Waterbottle
+Price: 30000.0
+Stock: 5
+
+Product ID: 102
+Product Name: shoes
+Price: 2000.0
+Stock: 7
+
+Product ID: 103
+Product Name: Smartwatch
+Price: 15000.0
+Stock: 3
+
+Product ID: 104
+Product Name: Umbrella
+Price: 25000.0
+Stock: 8
+
+--------------------
+
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+3
+Enter Product ID to add to cart:
+100
+Product Laptop added to cart.
+--------------------
+
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+3
+Enter Product ID to add to cart:
+103
+Product Smartwatch added to cart.
+--------------------
+
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+4
+Your Cart:
+Product ID: 100
+Product Name: Laptop
+Price: 80000.0
+Stock: 10
+Product ID: 103
+Product Name: Smartwatch
+Price: 15000.0
+Stock: 3
+--------------------
+
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+5
+Checkout:
+Product available: Laptop
+===============
+Stock updated for product: Laptop
+==============
+Product ID: 100
+Product Name: Laptop
+Price: 80000.0
+Total cost of products: 95000.0
+Product available: Smartwatch
+===============
+Stock updated for product: Smartwatch
+==============
+Product ID: 103
+Product Name: Smartwatch
+Price: 15000.0
+Total cost of products: 95000.0
+
+
+E-COMMERCE APPLICATION
+Choose your Option:
+1.Enter User Details
+2.Veiw Available Products
+3.Add Product to Cart
+4.View Cart
+5.Checkout
+6.Exit
+
+6
+Exiting the application.
+Thank you for using our service!
