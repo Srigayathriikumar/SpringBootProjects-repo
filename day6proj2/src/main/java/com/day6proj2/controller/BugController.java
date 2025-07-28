@@ -1,16 +1,14 @@
 package com.day6proj2.controller;
-
-
 import com.day6proj2.entity.Bug;
 import com.day6proj2.services.BugService;
 import java.util.List;
 import java.util.Scanner;
 public class BugController {
-    private BugService bugService;
+    private BugService bugservice;
     private Scanner sc = new Scanner(System.in);
 
-    public BugController(BugService bugService) {
-        this.bugService = bugService;
+    public BugController(BugService bugservice) {
+        this.bugservice = bugservice;
     }
 
     public void run() {
@@ -56,12 +54,12 @@ public class BugController {
         String description = sc.nextLine();
         System.out.print("Enter bug status: ");
         String status = sc.nextLine();
-        bugService.createBug(title, description, status);
+        bugservice.createBug(title, description, status);
         System.out.println("Bug created successfully.");
     }
 
     private void displayAllBugs() {
-        List<Bug> bugs = bugService.getAllBugs();
+        List<Bug> bugs = bugservice.getAllBugs();
         if (bugs.isEmpty()) {
             System.out.println("No bugs found");
         } else {
@@ -80,11 +78,11 @@ public class BugController {
         int id = sc.nextInt();
         sc.nextLine(); 
         System.out.print("Enter new status: ");
-        String newStatus = sc.nextLine();
-        Bug bug = bugService.getBugById(id);
+        String newstatus = sc.nextLine();
+        Bug bug = bugservice.getBugById(id);
         if (bug != null) {
-            bug.setStatus(newStatus);
-            bugService.updateBug(bug);
+            bug.setStatus(newstatus);
+            bugservice.updateBug(bug);
             
         } else {
             System.out.println("Bug not found with ID: " + id);
@@ -94,9 +92,9 @@ public class BugController {
         System.out.print("Enter bug ID to delete: ");
         int id = sc.nextInt();
         sc.nextLine();
-        Bug bug = bugService.getBugById(id);
+        Bug bug = bugservice.getBugById(id);
         if (bug != null) {
-            bugService.deleteBug(bug);
+            bugservice.deleteBug(bug);
             
         } else {
             System.out.println("Bug not found with ID: " + id);

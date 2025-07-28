@@ -5,11 +5,11 @@ import com.day6proj1.services.BugService;
 import java.util.List;
 import java.util.Scanner;
 public class BugController {
-    private final BugService bugService;
+    private final BugService bugservice;
     private Scanner sc = new Scanner(System.in);
 
-    public BugController(BugService bugService) {
-        this.bugService = bugService;
+    public BugController(BugService bugservice) {
+        this.bugservice = bugservice;
     }
 
     public void run() {
@@ -44,12 +44,12 @@ public class BugController {
         String description = sc.nextLine();
         System.out.print("Enter bug status: ");
         String status = sc.nextLine();
-        bugService.createBug(title, description, status);
+        bugservice.createBug(title, description, status);
         System.out.println("Bug created successfully.");
     }
 
     private void displayAllBugs() {
-        List<Bug> bugs = bugService.getAllBugs();
+        List<Bug> bugs = bugservice.getAllBugs();
         if (bugs.isEmpty()) {
             System.out.println("No bugs found");
         } else {
