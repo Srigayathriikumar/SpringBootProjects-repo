@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 public class BugController {
     private BugService bugservice;
-    private Scanner sc = new Scanner(System.in);
+    Scanner sc = new Scanner(System.in);
 
     public BugController(BugService bugservice) {
         this.bugservice = bugservice;

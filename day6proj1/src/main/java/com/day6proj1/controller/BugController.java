@@ -5,8 +5,8 @@ import com.day6proj1.services.BugService;
 import java.util.List;
 import java.util.Scanner;
 public class BugController {
-    private final BugService bugservice;
-    private Scanner sc = new Scanner(System.in);
+    private BugService bugservice;
+    Scanner sc = new Scanner(System.in);
 
     public BugController(BugService bugservice) {
         this.bugservice = bugservice;
