@@ -1,0 +1,374 @@
+The Mini Issue Tracker is a console-based Java application that helps developers manage and track bugs in a lightweight, structured manner. Designed as a learning project, it demonstrates how to build a CRUD-based system using JDBC for database connectivity and PostgreSQL as the backend database.
+
+This application follows a layered architecture with clear separation of concerns (Model, DAO, Utility, and Main classes), making it easier to maintain and scale in the future.
+
+  File Structure:
+  
+day5proj2/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── day5proj2/
+│   │   │           ├── Main.java
+│   │   │           ├── dao/
+│   │   │           │   └── BugDAO.java
+│   │   │           ├── model/
+│   │   │           │   └── Bug.java
+│   │   │           └── util/
+│   │   │               └── DBUtil.java
+│   └── resources/
+├── pom.xml
+
+  --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  CODE:
+ Main.java:
+
+package com.day5proj2;
+
+import com.day5proj2.dao.BugDAO;
+import com.day5proj2.models.Bug;
+
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        BugDAO dao = new BugDAO();
+        int choice;
+
+        do {
+            System.out.println("\n--- MINI ISSUE TRACKER ---");
+            System.out.println("1. Add Bug");
+            System.out.println("2. View All Bugs");
+            System.out.println("3. Update Bug Status");
+            System.out.println("4. Delete Bug");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            choice = s.nextInt();
+            s.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Bug Title: ");
+                    String title = s.nextLine();
+                    System.out.print("Enter Description: ");
+                    String description = s.nextLine();
+                    System.out.print("Enter Status: ");
+                    String status = s.nextLine();
+                    dao.insertbug(new Bug(title, description, status));
+                    break;
+
+                case 2:
+                    List<Bug> bugs = dao.getallbugs();
+                    if (bugs.isEmpty()) {
+                        System.out.println("No bugs found.");
+                    } else {
+                        for (Bug b : bugs) {
+                            System.out.println("\nBug ID: " + b.getId());
+                            System.out.println("Title: " + b.getTitle());
+                            System.out.println("Description: " + b.getDescription());
+                            System.out.println("Status: " + b.getStatus());
+                            System.out.println("-----------------------------");
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter Bug ID to update: ");
+                    int idToUpdate = s.nextInt();
+                    s.nextLine();
+                    System.out.print("Enter new status: ");
+                    String newStatus = s.nextLine();
+                    dao.updateStatus(idToUpdate, newStatus);
+                    break;
+
+                case 4:
+                    System.out.print("Enter Bug ID to delete: ");
+                    int idToDelete = s.nextInt();
+                    dao.deleteBug(idToDelete);
+                    break;
+
+                case 5:
+                    System.out.println(" Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+
+        } while (choice != 5);
+
+        s.close();
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+BugDAO.java:
+
+package com.day5proj2.dao;
+
+import java.sql.*;
+import java.util.*;
+import com.day5proj2.models.Bug;
+import com.day5proj2.util.DBUtil;
+
+public class BugDAO {
+
+    public void insertbug(Bug bug) {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO bugs (title, description, status) VALUES (?, ?, ?)")) {
+            ps.setString(1, bug.getTitle());
+            ps.setString(2, bug.getDescription());
+            ps.setString(3, bug.getStatus());
+            ps.executeUpdate();
+            System.out.println("Bug inserted successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Bug> getallbugs() {
+        List<Bug> list = new ArrayList<>();
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement st = con.prepareStatement("SELECT * FROM bugs");
+             ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                Bug b = new Bug();
+                b.setId(rs.getInt("id"));
+                b.setTitle(rs.getString("title"));
+                b.setDescription(rs.getString("description"));
+                b.setStatus(rs.getString("status"));
+                list.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void updateStatus(int id, String newStatus) {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE bugs SET status = ? WHERE id = ?")) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, id);
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println(" Status updated successfully.");
+            } else {
+                System.out.println(" Bug ID not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteBug(int id) {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM bugs WHERE id = ?")) {
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Bug deleted successfully.");
+            } else {
+                System.out.println(" Bug ID not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Bug.java:
+
+package com.day5proj2.models;
+
+public class Bug {
+    private int id;
+    private String title;
+    private String description;
+    private String status;
+
+    public Bug() {}
+
+    public Bug(String title, String description, String status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
+
+    public Bug(int id, String title, String description, String status) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
+
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getStatus() { return status; }
+
+    public void setId(int id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setDescription(String description) { this.description = description; }
+    public void setStatus(String status) { this.status = status; }
+
+    @Override
+    public String toString() {
+        return "Bug ID: " + id + ", Title: " + title + ", Description: " + description + ", Status: " + status;
+    }
+}
+
+
+DBUtil.java:
+
+package com.day5proj2.util;
+
+import java.sql.DriverManager;
+import java.sql.Connection;
+public class DBUtil {
+    public static Connection getConnection(){
+        Connection con=null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            con=DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","root123");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SAMPLE OUTPUT:
+
+--- MINI ISSUE TRACKER ---
+1. Add Bug
+2. View All Bugs
+3. Update Bug Status
+4. Delete Bug
+5. Exit
+Enter choice: 1
+Enter Bug Title: search bar issue
+Enter Description: search bar malfucntion
+Enter Status: opened
+Bug inserted successfully.
+
+--- MINI ISSUE TRACKER ---
+1. Add Bug
+2. View All Bugs
+3. Update Bug Status
+4. Delete Bug
+5. Exit
+Enter choice: 2
+
+Bug ID: 1
+Title: dfsdl
+Description: smdfywj
+Status: mkeiufe
+-----------------------------
+
+Bug ID: 2
+Title: website issue
+Description: not posting message
+Status: opened
+-----------------------------
+
+Bug ID: 3
+Title: new issue
+Description: login error
+Status: waiting
+-----------------------------
+
+Bug ID: 4
+Title: more tickets
+Description: heavy ticket trafficking
+Status: opened
+-----------------------------
+
+Bug ID: 5
+Title: solve the login issue
+Description: login password always mismatches
+Status: closed
+-----------------------------
+
+Bug ID: 6
+Title: search bar issue
+Description: search bar malfucntion
+Status: opened
+-----------------------------
+
+--- MINI ISSUE TRACKER ---
+1. Add Bug
+2. View All Bugs
+3. Update Bug Status
+4. Delete Bug
+5. Exit
+Enter choice: 3
+Enter Bug ID to update: 6
+Enter new status: waiting
+ Status updated successfully.
+
+--- MINI ISSUE TRACKER ---
+1. Add Bug
+2. View All Bugs
+3. Update Bug Status
+4. Delete Bug
+5. Exit
+Enter choice: 4
+Enter Bug ID to delete: 2
+Bug deleted successfully.
+
+--- MINI ISSUE TRACKER ---
+1. Add Bug
+2. View All Bugs
+3. Update Bug Status
+4. Delete Bug
+5. Exit
+Enter choice: 2
+
+Bug ID: 1
+Title: dfsdl
+Description: smdfywj
+Status: mkeiufe
+-----------------------------
+
+Bug ID: 3
+Title: new issue
+Description: login error
+Status: waiting
+-----------------------------
+
+Bug ID: 4
+Title: more tickets
+Description: heavy ticket trafficking
+Status: opened
+-----------------------------
+
+Bug ID: 5
+Title: solve the login issue
+Description: login password always mismatches
+Status: closed
+-----------------------------
+
+Bug ID: 6
+Title: search bar issue
+Description: search bar malfucntion
+Status: waiting
+-----------------------------
+
+--- MINI ISSUE TRACKER ---
+1. Add Bug
+2. View All Bugs
+3. Update Bug Status
+4. Delete Bug
+5. Exit
+Enter choice: 5
+ Exiting...
+
