@@ -1,71 +1,79 @@
 package com.day5proj1phase2;
+
+import com.day5proj1phase2.dao.BugDAO;
 import com.day5proj1phase2.models.Bug;
-import com.day5proj1phase2.services.BugService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        BugService service = new BugService();
+        Scanner s = new Scanner(System.in);
+        BugDAO dao = new BugDAO();
         int choice;
 
         do {
-            System.out.println("\n--- BUG TRACKER MENU ---");
-            System.out.println("1. Insert a new bug");
-            System.out.println("2. View all bugs");
-            System.out.println("3. Delete a bug by ID");
-            System.out.println("4. Update bug status by ID");
+        System.out.println("\nISSUE TRACKER");
+            System.out.println("1. Add Bug");
+            System.out.println("2. View All Bugs");
+            System.out.println("3. Update Bug Status");
+            System.out.println("4. Delete Bug");
             System.out.println("5. Exit");
             System.out.print("Enter choice: ");
-            choice = sc.nextInt();
-            sc.nextLine(); 
+            choice = s.nextInt();
+            s.nextLine(); 
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter bug title: ");
-                    String title = sc.nextLine();
-                    System.out.print("Enter description: ");
-                    String desc = sc.nextLine();
-                    System.out.print("Enter status: ");
-                    String status = sc.nextLine();
-                    Bug bug = new Bug(title, desc, status);
-                    service.addBug(bug);
+                    System.out.print("Enter Bug Title: ");
+                    String title = s.nextLine();
+                    System.out.print("Enter Description: ");
+                    String description = s.nextLine();
+                    System.out.print("Enter Status: ");
+                    String status = s.nextLine();
+                    dao.insertbug(new Bug(title, description, status));
                     break;
 
                 case 2:
-                    List<Bug> bugs = service.viewAllBugs();
-                    for (Bug b : bugs) {
-                        System.out.println(b);
+                    List<Bug> bugs = dao.getallbugs();
+                    if (bugs.isEmpty()) {
+                        System.out.println("No bugs found.");
+                    } else {
+                        for (Bug b : bugs) {
+                            System.out.println("\nBug ID: " + b.getId());
+                            System.out.println("Title: " + b.getTitle());
+                            System.out.println("Description: " + b.getDescription());
+                            System.out.println("Status: " + b.getStatus());
+                            System.out.println("-----------------------------");
+                        }
                     }
                     break;
 
                 case 3:
-                    System.out.print("Enter Bug ID to delete: ");
-                    int deleteId = sc.nextInt();
-                    service.deleteBug(deleteId);
+                    System.out.print("Enter Bug ID to update: ");
+                    int idToUpdate = s.nextInt();
+                    s.nextLine();
+                    System.out.print("Enter new status: ");
+                    String newStatus = s.nextLine();
+                    dao.updateStatus(idToUpdate, newStatus);
                     break;
 
                 case 4:
-                    System.out.print("Enter Bug ID to update: ");
-                    int updateId = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Enter new status: ");
-                    String newStatus = sc.nextLine();
-                    service.updateBugStatus(updateId, newStatus);
+                    System.out.print("Enter Bug ID to delete: ");
+                    int idToDelete = s.nextInt();
+                    dao.deleteBug(idToDelete);
                     break;
 
                 case 5:
-                    System.out.println("Exiting. Goodbye!");
+                    System.out.println(" Exiting...");
                     break;
 
                 default:
-                    System.out.println("Invalid option. Try again.");
+                    System.out.println("Invalid choice. Try again.");
             }
 
         } while (choice != 5);
 
-        sc.close();
+        s.close();
     }
 }
