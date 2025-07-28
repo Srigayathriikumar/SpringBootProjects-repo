@@ -12,9 +12,9 @@ public class BugRepositoryImpl implements BugRepository {
 
     @Override
     public void createBug(Bug bug) {
-        
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO bugs(title, description, status) VALUES (?, ?, ?)")) {
+        Connection con = DBUtil.getConnection();
+        try  {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO bugs (title, description, status) VALUES (?, ?, ?)");
             ps.setString(1, bug.getTitle());
             ps.setString(2, bug.getDescription());
             ps.setString(3, bug.getStatus());
@@ -27,10 +27,10 @@ public class BugRepositoryImpl implements BugRepository {
     @Override
     public List<Bug> getAllBugs() {
         List<Bug> bugList = new ArrayList<>();
-        
-        try (Connection con = DBUtil.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM bugs")) {
+        Connection con = DBUtil.getConnection();
+        try  {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM bugs");
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Bug bug = new Bug();
                 bug.setId(rs.getInt("id"));
@@ -47,8 +47,9 @@ public class BugRepositoryImpl implements BugRepository {
 
     @Override
     public void updateBug(Bug bug) {
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE bugs SET status = ? WHERE id = ?")) {
+        Connection con = DBUtil.getConnection();
+        try  {
+            PreparedStatement ps = con.prepareStatement("UPDATE bugs SET status = ? WHERE id = ?");
             ps.setString(1, bug.getStatus());
             ps.setInt(2, bug.getId());
             int rows = ps.executeUpdate();
@@ -64,8 +65,9 @@ public class BugRepositoryImpl implements BugRepository {
 
     @Override
     public void deleteBug(Bug bug) {
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM bugs WHERE id = ?")) {
+        Connection con = DBUtil.getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM bugs WHERE id = ?");
             ps.setInt(1, bug.getId());
             int rows = ps.executeUpdate();
             if (rows > 0) {

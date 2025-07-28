@@ -8,8 +8,9 @@ import com.day5proj2.util.DBUtil;
 public class BugDAO {
 
     public void insertbug(Bug bug) {
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO bugs (title, description, status) VALUES (?, ?, ?)")) {
+        Connection con = DBUtil.getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO bugs (title, description, status) VALUES (?, ?, ?)");
             ps.setString(1, bug.getTitle());
             ps.setString(2, bug.getDescription());
             ps.setString(3, bug.getStatus());
@@ -22,9 +23,10 @@ public class BugDAO {
 
     public List<Bug> getallbugs() {
         List<Bug> list = new ArrayList<>();
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement st = con.prepareStatement("SELECT * FROM bugs");
-             ResultSet rs = st.executeQuery()) {
+        Connection con = DBUtil.getConnection();
+        try  {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM bugs");
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Bug b = new Bug();
                 b.setId(rs.getInt("id"));
@@ -40,8 +42,9 @@ public class BugDAO {
     }
 
     public void updateStatus(int id, String newStatus) {
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE bugs SET status = ? WHERE id = ?")) {
+        Connection con = DBUtil.getConnection();
+        try  {
+            PreparedStatement ps = con.prepareStatement("UPDATE bugs SET status = ? WHERE id = ?");
             ps.setString(1, newStatus);
             ps.setInt(2, id);
             int rows = ps.executeUpdate();
@@ -56,8 +59,9 @@ public class BugDAO {
     }
 
     public void deleteBug(int id) {
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM bugs WHERE id = ?")) {
+        Connection con = DBUtil.getConnection();
+        try  {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM bugs WHERE id = ?");
             ps.setInt(1, id);
             int rows = ps.executeUpdate();
             if (rows > 0) {
