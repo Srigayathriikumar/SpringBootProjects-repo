@@ -31,5 +31,5 @@ The application captures bug-related information such as title, description, and
 
 ## Author
 
-**Name:** Srigayatri  
+**Name:** Srigayathri K
 **Date:** July 25, 2025
