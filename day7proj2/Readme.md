@@ -14,7 +14,7 @@ This project demonstrates how to build a minimal RESTful web service using Sprin
 - Clean and modular code structure
 
 ## Endpoints and Sample Outputs
-| Endpoint                  | Output                                                  |
+| Endpoint                  | Output                                                   |
 |---------------------------|----------------------------------------------------------|
 | `/weather/today`          | Today's weather: Sunny, 30°C                             |
 | `/weather/tomorrow`       | Tomorrow's forecast: Cloudy with rain                    |
@@ -29,7 +29,7 @@ This project demonstrates how to build a minimal RESTful web service using Sprin
 ## How to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/day7proj2-weatherapp.git
+   git clone https://github.com/your-username/day7proj2.git
    cd day7proj2-weatherapp
 
 ## Build and run the application:
