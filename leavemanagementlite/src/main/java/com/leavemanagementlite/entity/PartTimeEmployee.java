@@ -5,5 +5,4 @@ public class PartTimeEmployee extends Employee {
         super(id, name, department, email);
     }
 
-    // Add part-time specific leave policies later
 }

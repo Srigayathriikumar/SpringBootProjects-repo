@@ -19,7 +19,6 @@ public class LeaveRequest {
         this.status = status;
     }
 
-    // Getters and Setters
     public int getId() { return id; }
     public int getEmployeeId() { return employeeId; }
     public LocalDate getFromDate() { return fromDate; }

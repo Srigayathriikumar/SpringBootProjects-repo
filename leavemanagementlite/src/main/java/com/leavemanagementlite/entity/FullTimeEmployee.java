@@ -5,5 +5,4 @@ public class FullTimeEmployee extends Employee {
         super(id, name, department, email);
     }
 
-    // Add full-time specific leave policies later
 }
