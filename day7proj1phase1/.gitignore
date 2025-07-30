@@ -1,0 +1,18 @@
+#maven
+/target
+!.mvn/wrapper/maven-wrapper.jar
+
+#logs
+*.log
+
+#IDE specific files
+.idea/  
+*.iml
+.vscode/
+
+#os
+.DS_Store
+Thumbs.db
+
+#spring boot dev tools
+spring-boot-devtools.properties
