@@ -50,11 +50,12 @@ The system includes features like:
 6. Display All Leave Requests
 7. Exit
 Choose an option: 1
+---
 Name: Watson
 Department: Testing
 Email: watson.t@gmail.com
 Employee added.
-
+---
 --- Leave Management Menu ---
 1. Add Employee
 2. Apply for Leave
@@ -64,12 +65,13 @@ Employee added.
 6. Display All Leave Requests
 7. Exit
 Choose an option: 2
+---
 Employee ID: 2 
 From Date (yyyy-mm-dd): 2025-09-02
 To Date (yyyy-mm-dd): 2025-09-10
 Reason: Vacation
 Leave applied.
-
+---
 --- Leave Management Menu ---
 1. Add Employee
 2. Apply for Leave
@@ -79,10 +81,11 @@ Leave applied.
 6. Display All Leave Requests
 7. Exit
 Choose an option: 3
+---
 Enter Leave ID to update status: 6
 Enter new status (Approved/Rejected): Rejected
 Leave status updated.
-
+---
 --- Leave Management Menu ---
 1. Add Employee
 2. Apply for Leave
@@ -92,9 +95,10 @@ Leave status updated.
 6. Display All Leave Requests
 7. Exit
 Choose an option: 4
+---
 Enter Leave ID to delete: 3
 Leave request deleted.
-
+---
 --- Leave Management Menu ---
 1. Add Employee
 2. Apply for Leave
@@ -104,10 +108,11 @@ Leave request deleted.
 6. Display All Leave Requests
 7. Exit
 Choose an option: 5
+---
 1 | jake | HR | jake.hr@gmail.com
 2 | felix | dev | felix.s@gmail.com
 3 | Watson | Testing | watson.t@gmail.com
-
+---
 --- Leave Management Menu ---
 1. Add Employee
 2. Apply for Leave
@@ -117,10 +122,11 @@ Choose an option: 5
 6. Display All Leave Requests
 7. Exit
 Choose an option: 6
+---
 4 | 2 | 2025-08-02 | 2025-08-30 | medical leave | Pending
 5 | 1 | 2025-08-21 | 2025-08-28 | health issue | Pending
 6 | 2 | 2025-09-02 | 2025-09-10 | Vacation | Rejected
-
+---
 --- Leave Management Menu ---
 1. Add Employee
 2. Apply for Leave
@@ -130,7 +136,10 @@ Choose an option: 6
 6. Display All Leave Requests
 7. Exit
 Choose an option: 7
+---
 Exiting...
 
-## Author ## : Srigayathri K
-## Date ## : 29-07-2025
+---
+
+## Author : Srigayathri K
+## Date : 29-07-2025
