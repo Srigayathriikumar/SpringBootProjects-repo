@@ -158,20 +158,17 @@ Exiting application...
         "description": "New login error",
         "status": "Closed",
         "created_by":"james",
-        "assigned_to":"jathin"
-        
+        "assigned_to":"jathin"  
     }
     {
         "id": 2,
         "description": "button malfunction",
         "status": "Resolved",
         "created_by":"william",
-        "assigned_to":"kalai"
-        
+        "assigned_to":"kalai"   
     }
 ]
 
----
 
 ## Author
 
