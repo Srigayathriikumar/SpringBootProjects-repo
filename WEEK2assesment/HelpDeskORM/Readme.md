@@ -113,7 +113,7 @@ Please select an option:
 Resolving ticket
 Enter ticket ID to resolve:
 2
-Ticket status updated to 'Closed' for ticket ID: 2
+Ticket status updated to 'Resolved' for ticket ID: 2
 ---------------------------
 
 
@@ -128,32 +128,12 @@ Please select an option:
 5
 Viewing tickets from JDBC...
 Tickets:
-SupportTicket{ticketId=1, Description='new login error', status='Closed', created_by='james', assigned_to='jathin'}
-SupportTicket{ticketId=2, Description='button malfunction', status='Resolved', created_by='william', assigned_to='kalai'}
----------------------------
-
-5
-Viewing tickets from JDBC...
-Tickets:
-SupportTicket{ticketId=1, Description='new login error', status='Closed', created_by='james', assigned_to='jathin'}
-SupportTicket{ticketId=2, Description='button malfunction', status='Resolved', created_by='william', assigned_to='kalai'}
----------------------------
-
-Tickets:
-SupportTicket{ticketId=1, Description='new login error', status='Closed', created_by='james', assigned_to='jathin'}
-SupportTicket{ticketId=2, Description='button malfunction', status='Resolved', created_by='william', assigned_to='kalai'}
----------------------------
 
 SupportTicket{ticketId=1, Description='new login error', status='Closed', created_by='james', assigned_to='jathin'}
-SupportTicket{ticketId=2, Description='button malfunction', status='Resolved', created_by='william', assigned_to='kalai'}
----------------------------
 
 SupportTicket{ticketId=2, Description='button malfunction', status='Resolved', created_by='william', assigned_to='kalai'}
----------------------------
-
 
 ---------------------------
-
 
 
 Welcome to the Help Desk ORM Application!
