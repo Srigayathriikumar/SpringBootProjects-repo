@@ -59,6 +59,8 @@ Data is persisted using **PostgreSQL** and accessed through **Spring Data JPA** 
 | GET    | `/api/users`           | Get all users             |
 | GET    | `/api/users/{id}`      | Get user by ID            |
 | POST   | `/api/users/create`    | Create a new user         |
+| GET    | `/api/bugs`            | Get all bugs with DTO     |
+| POST   | `/api/bugs`            | Create bugs with DTO      |
 
 
  Sample JSON:
