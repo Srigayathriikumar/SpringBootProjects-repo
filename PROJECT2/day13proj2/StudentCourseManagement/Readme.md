@@ -30,7 +30,7 @@ This application allows administrators to perform CRUD operations on students an
 ## API URLs
 ### Student APIs
 - `GET /api/students` – Get all students with DTO
-- - `POST /api/students` – Create students with DTO  
+- `POST /api/students` – Create students with DTO  
 - `GET /api/students/all` – Get all students  
 - `GET /api/students/{id}` – Get student by ID  
 - `POST /api/students/create` – Create new student  
