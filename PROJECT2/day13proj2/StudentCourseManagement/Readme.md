@@ -29,6 +29,8 @@ This application allows administrators to perform CRUD operations on students an
 
 ## API URLs
 ### Student APIs
+- `GET /api/students` – Get all students with DTO
+- - `POST /api/students` – Create students with DTO  
 - `GET /api/students/all` – Get all students  
 - `GET /api/students/{id}` – Get student by ID  
 - `POST /api/students/create` – Create new student  
@@ -36,6 +38,7 @@ This application allows administrators to perform CRUD operations on students an
 - `DELETE /api/students/delete/{id}` – Delete student  
 
 ### Course APIs
+
 - `GET /api/courses/all` – Get all courses  
 - `GET /api/courses/{id}` – Get course by ID  
 - `POST /api/courses/create` – Create new course  
