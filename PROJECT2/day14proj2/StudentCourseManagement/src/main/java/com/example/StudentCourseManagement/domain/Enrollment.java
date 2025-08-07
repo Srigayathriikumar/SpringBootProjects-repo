@@ -1,6 +1,7 @@
 package com.example.StudentCourseManagement.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.*;
 
 import java.sql.Date;
 
@@ -10,7 +11,11 @@ import jakarta.persistence.*;
 @Table(name = "enrollments")
 public class Enrollment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @NotNull
     private Long id;
+
+    @NotBlank(message="the date should not be blank")
     private Date enrollmentDate;
 
     @ManyToOne
