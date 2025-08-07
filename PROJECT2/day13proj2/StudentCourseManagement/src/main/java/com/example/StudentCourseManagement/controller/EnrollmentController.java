@@ -9,6 +9,8 @@ import com.example.StudentCourseManagement.domain.Course;
 import com.example.StudentCourseManagement.domain.Enrollment;
 import com.example.StudentCourseManagement.service.EnrollmentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/enrollments")
 public class EnrollmentController {
@@ -21,7 +23,7 @@ public class EnrollmentController {
         return enrollmentService.getAllEnrollments();
     }
     @PostMapping("/create")
-    public Enrollment createEnrollment(@RequestBody Enrollment enrollment) {
+    public Enrollment createEnrollment(@Valid @RequestBody Enrollment enrollment) {
         return enrollmentService.createEnrollment(enrollment);
     }
     @GetMapping("/courses/{studentId}")

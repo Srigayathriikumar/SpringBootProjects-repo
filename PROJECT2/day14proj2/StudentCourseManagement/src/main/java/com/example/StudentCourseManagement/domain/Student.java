@@ -11,7 +11,6 @@ import java.util.*;
 public class Student {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @NotNull(message="id should not be null")
     private Long id;
     @NotBlank(message="name not be null")
     private String name;

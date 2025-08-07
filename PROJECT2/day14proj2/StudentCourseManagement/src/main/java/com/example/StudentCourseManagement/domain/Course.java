@@ -7,7 +7,6 @@ import jakarta.validation.constraints.*;
 @Table(name = "courses")
 public class Course {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(message="id not null")
     private Long id;
     @NotBlank(message="title not be blank")
     @Size(min=3,max=20,message="should be between 3 to 20 letters")
@@ -18,6 +17,9 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments;
 
+    public Course(){
+
+    }
     public Long getId() {
         return id;
     }

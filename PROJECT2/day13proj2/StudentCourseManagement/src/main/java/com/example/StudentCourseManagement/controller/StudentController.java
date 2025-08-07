@@ -43,12 +43,12 @@ public class StudentController {
 
     
     @PostMapping("/create")
-    public Student createStudent(@RequestBody Student student) {
+    public Student createStudent(@Valid @RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
     @PutMapping("/update/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestParam String name, @RequestParam String email) {
+    public Student updateStudent(@Valid @PathVariable Long id, @RequestParam String name, @RequestParam String email) {
         return studentService.updateStudent(id, name, email);
     }
 
