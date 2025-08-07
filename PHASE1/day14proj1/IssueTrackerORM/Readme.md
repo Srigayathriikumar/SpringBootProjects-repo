@@ -1,4 +1,4 @@
-#  Issue Tracker ORM
+<img width="1381" height="758" alt="Screenshot 2025-08-07 125815" src="https://github.com/user-attachments/assets/a7293e2b-3097-44f3-a747-9e0b09bf0064" />#  Issue Tracker ORM
 
 A simple issue tracking system built with **Spring Boot**, using **Spring Data JPA** and a **PostgreSQL** database. The application allows users to manage projects, assign users, and track bugs in a structured and scalable way.
 
@@ -65,11 +65,17 @@ Data is persisted using **PostgreSQL** and accessed through **Spring Data JPA** 
 
  Sample JSON:
 
-```json
+json
 {
   "username": "swathi",
   "role": "Manager"
 }
+
 ---
+
+## validation output:
+
+<img width="1381" height="758" alt="Screenshot 2025-08-07 125815" src="https://github.com/user-attachments/assets/85e1f2b5-8eb8-4faa-a291-2195e944bc65" />
+
 
 Author : Srigayathri K
