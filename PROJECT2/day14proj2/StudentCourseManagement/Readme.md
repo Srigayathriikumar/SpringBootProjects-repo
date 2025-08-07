@@ -50,3 +50,21 @@ This application allows administrators to perform CRUD operations on students an
 - `GET /api/enrollments/all` – View all enrollments  
 - `GET /api/enrollments/student/courses/{studentId}` – View courses by student  
 
+
+### Validations
+
+## Student email validation:
+
+<img width="1384" height="690" alt="Screenshot 2025-08-07 130314" src="https://github.com/user-attachments/assets/9b416369-f899-4f6a-a50c-25ff594cbad9" />
+
+## Courses validation:
+
+<img width="1376" height="706" alt="Screenshot 2025-08-07 150613" src="https://github.com/user-attachments/assets/cbab2222-a22a-4b29-9918-9593fcb579e9" />
+
+## Enrollments validation
+
+<img width="1384" height="705" alt="Screenshot 2025-08-07 152453" src="https://github.com/user-attachments/assets/b67b53ee-76c6-4bda-8af2-0c786d99ffc1" />
+
+---  
+
+Author: Srigayathri K
