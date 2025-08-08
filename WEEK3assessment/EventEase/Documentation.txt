@@ -1,0 +1,1098 @@
+EventEase Project - Complete Java Code Documentation
+===================================================
+
+---------------------------------------------------
+1. com.example.EventEase.domain
+---------------------------------------------------
+
+User.java
+---------
+package com.example.EventEase.domain;
+
+import java.util.List;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "usersease")
+public class User {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    private String email; 
+    
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, orphanRemoval = true)
+private List<Registration> registrations;
+
+    public User(){
+
+    }
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
+}
+
+
+---------------------------------------------------
+
+Event.java
+----------
+package com.example.EventEase.domain;
+
+import java.sql.Date;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "events")
+public class Event {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    private String description;
+    private Date date;
+    private String location;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Registration> registrations;
+
+    public Event() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    
+}
+
+
+---------------------------------------------------
+
+Registration.java
+-----------------
+package com.example.EventEase.domain;
+
+import java.sql.Date;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "registrationsease")
+public class Registration {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @JsonProperty("userId")
+    @Column(name = "user_id")
+    private Long user_id;
+    @JsonProperty("eventId")
+    @Column(name = "event_id")
+    private Long event_id;
+    @JsonProperty("registrationDate")
+    @Column(name = "registration_date", nullable = false, updatable = false)
+    
+    private Date registrationDate = new Date(System.currentTimeMillis());
+
+    @PrePersist
+    protected void onCreate() {
+        this.registrationDate = new Date(System.currentTimeMillis());
+    }
+
+    @ManyToOne
+@JoinColumn(name = "user_id", insertable = false, updatable = false)
+private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id", insertable = false, updatable = false)
+    private Event event;
+
+    public Registration() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public Long getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(Long event_id) {
+        this.event_id = event_id;
+    }
+
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    
+    
+}
+
+
+
+
+---------------------------------------------------
+2. com.example.EventEase.dto
+---------------------------------------------------
+
+UserRequestDTO.java
+-------------------
+package com.example.EventEase.dto;
+
+import jakarta.validation.constraints.*;
+public class UserRequestDTO {
+    
+    private Long id;
+
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    private String username;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
+    private String email;
+
+    public UserRequestDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
+}
+
+
+
+UserResponseDTO.java
+--------------------
+package com.example.EventEase.dto;
+
+public class UserResponseDTO {
+    
+    private Long id;
+    private String username;
+    private String email;
+
+    public UserResponseDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
+}
+
+
+
+EventRequestDTO.java
+--------------------
+package com.example.EventEase.dto;
+import jakarta.validation.constraints.*;
+public class EventRequestDTO {
+    
+    private Long id;
+    @NotBlank(message = "Event name is required")
+    @Size(min = 3, max = 50, message = "Event name must be between 3 and 50 characters")
+    private String name;
+    @NotBlank(message="Event description is required")
+    @Size(min = 10, max = 200, message = "Event description must be between 10 and 200 characters")
+    private String description;
+    
+    @NotBlank(message = "Event date is required")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Event date must be in the format YYYY-MM-DD")
+    private String date;
+
+    @NotBlank(message = "Event location is required")
+    @Size(min = 3, max = 100, message = "Event location must be between 3 and 100 characters")
+    private String location;
+
+    public EventRequestDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    
+
+
+}
+
+
+
+EventResponseDTO.java
+---------------------
+package com.example.EventEase.dto;
+
+import java.sql.Date;
+
+public class EventResponseDTO {
+    
+    private Long id;
+    private String title;
+    private Date date;
+    private String location;
+
+    public EventResponseDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+}
+
+RegistrationRequestDTO.java
+----------------------------
+package com.example.EventEase.dto;
+import java.sql.Date;
+
+import jakarta.validation.constraints.*;
+public class RegistrationRequestDTO {
+   
+    private Long id;
+    @NotBlank(message = "Event ID is required")
+    private Long event_id;
+    @NotBlank(message = "User ID is required")
+    private Long user_id;
+    
+    
+    public RegistrationRequestDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(Long event_id) {
+        this.event_id = event_id;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+    
+    
+}
+
+
+
+RegistrationResponseDTO.java
+----------------------------
+package com.example.EventEase.dto;
+
+import java.sql.Date;
+
+public class RegistrationResponseDTO {
+    private Long id;
+    private Long event_id;
+    private Long user_id;
+    private Date registrationDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(Long event_id) {
+        this.event_id = event_id;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public RegistrationResponseDTO() {
+    }
+}
+
+
+
+
+---------------------------------------------------
+3. com.example.EventEase.mapper
+---------------------------------------------------
+
+UserMapper.java
+---------------
+package com.example.EventEase.mapper;
+import org.springframework.stereotype.Component;
+
+import com.example.EventEase.domain.User;
+import com.example.EventEase.dto.*;
+@Component
+public class UserMapper {
+    
+    public static User toEntity(UserRequestDTO userRequestDTO) {
+        User user = new User();
+        user.setId(userRequestDTO.getId());
+        user.setUsername(userRequestDTO.getUsername());
+        user.setEmail(userRequestDTO.getEmail());
+        
+        return user;
+    }
+
+    public static UserResponseDTO toResponse(User user) {
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setUsername(user.getUsername());
+        userResponseDTO.setEmail(user.getEmail());
+        return userResponseDTO;
+    }
+}
+
+
+
+EventMapper.java
+----------------
+package com.example.EventEase.mapper;
+import org.springframework.stereotype.Component;
+
+import com.example.EventEase.domain.Event;
+import com.example.EventEase.dto.EventResponseDTO;
+@Component
+public class EventMapper {
+    
+    public static Event mapToEvent(EventResponseDTO eventResponseDTO) {
+        Event event = new Event();
+        event.setId(eventResponseDTO.getId());
+        event.setTitle(eventResponseDTO.getTitle());
+        event.setDate(eventResponseDTO.getDate());
+        event.setLocation(eventResponseDTO.getLocation());
+        return event;
+    }
+    public static EventResponseDTO mapToResponse(Event event) {
+        EventResponseDTO eventResponseDTO = new EventResponseDTO();
+        eventResponseDTO.setId(event.getId());
+        eventResponseDTO.setTitle(event.getTitle());
+        eventResponseDTO.setDate(event.getDate());
+        eventResponseDTO.setLocation(event.getLocation());
+        return eventResponseDTO;
+    }
+}
+
+
+
+
+RegistrationMapper.java
+-----------------------
+package com.example.EventEase.mapper;
+import org.springframework.stereotype.Component;
+
+import com.example.EventEase.domain.Registration;
+import com.example.EventEase.dto.*;
+@Component
+public class RegistrationMapper {
+    public static Registration toEntity(RegistrationRequestDTO registrationDTO) {
+        Registration registration = new Registration();
+        registration.setId(registrationDTO.getId());
+        registration.setUser_id(registrationDTO.getUser_id());
+        registration.setEvent_id(registrationDTO.getEvent_id());
+        return registration;
+    }
+    public static RegistrationResponseDTO toResponse(Registration registration) {
+        RegistrationResponseDTO registrationDTO = new RegistrationResponseDTO();
+        registrationDTO.setId(registration.getId());
+        registrationDTO.setUser_id(registration.getUser_id());
+        registrationDTO.setEvent_id(registration.getEvent_id());
+        return registrationDTO;
+    }
+}
+
+
+
+
+---------------------------------------------------
+4. com.example.EventEase.repository
+---------------------------------------------------
+
+UserRepository.java
+-------------------
+package com.example.EventEase.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.EventEase.domain.User;
+
+public interface UserRepository extends JpaRepository<User,Long> {
+    public User findByUsername(String username);
+    public User findByEmail(String email);
+        
+}
+
+
+EventRepository.java
+--------------------
+package com.example.EventEase.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.sql.Date;
+import java.util.List;
+import com.example.EventEase.domain.Event;
+
+public interface EventRepository extends JpaRepository<Event, Long> {
+    public Event findByTitle(String title);
+    public Event findByLocation(String location);
+    public List<Event> findByDate(Date date);
+    
+}
+
+
+RegistrationRepository.java
+---------------------------
+package com.example.EventEase.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.EventEase.domain.Registration;
+
+public interface RegistrationRepository extends JpaRepository<Registration, Long> {
+    public Registration findByUser_id(Long userId);
+    public Registration findByEvent_id(Long eventId);    
+}
+
+
+---------------------------------------------------
+5. com.example.EventEase.service
+---------------------------------------------------
+
+UserService.java
+----------------
+package com.example.EventEase.service;
+import java.util.List;
+
+import com.example.EventEase.domain.User;
+public interface UserService {
+    public List<User> getAllUsers();
+    public User createUser(User user);
+    public User getUserById(Long id);
+    public User updateUser(Long id, User user);
+    public void deleteUser(Long id);
+}
+
+
+UserServiceImpl.java
+--------------------
+package com.example.EventEase.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.EventEase.repository.UserRepository;
+import com.example.EventEase.domain.User;
+@Service
+public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+    @Override
+    public User updateUser(Long id, User user) {
+        if (userRepository.existsById(id)) {
+            user.setId(id);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+    @Override
+    public void deleteUser(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        }
+    }
+}
+
+
+EventService.java
+---------------------
+package com.example.EventEase.service;
+
+import java.util.List;
+
+import com.example.EventEase.domain.Event;
+public interface EventService {
+    public List<Event> getAllEvents();
+    public Event createEvent(Event event);
+    public Event getEventById(Long id);
+    public Event updateEvent(Long id, Event event);
+    public void deleteEvent(Long id);
+}
+
+
+
+EventServiceImpl.java
+---------------------
+package com.example.EventEase.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.EventEase.repository.EventRepository;
+import com.example.EventEase.domain.Event;
+@Service
+public class EventServiceImpl implements EventService {
+   
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Override
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
+    }
+    @Override
+    public Event createEvent(Event event) {
+        return eventRepository.save(event);
+    }
+    @Override
+    public Event getEventById(Long id) {
+        return eventRepository.findById(id).orElse(null);
+    }
+    @Override
+    public Event updateEvent(Long id, Event event) {
+        if (eventRepository.existsById(id)) {
+            event.setId(id);
+            return eventRepository.save(event);
+        }
+        return null;
+    }
+    @Override
+    public void deleteEvent(Long id) {
+        if (eventRepository.existsById(id)) {
+            eventRepository.deleteById(id);
+        }
+    }
+    
+}
+
+
+RegistrationService.java
+------------------------
+package com.example.EventEase.service;
+import java.util.List;
+
+import com.example.EventEase.domain.Registration;
+public interface RegistrationService {
+    public List<Registration> getAllRegistrations();
+    public Registration createRegistration(Registration registration);
+    public Registration registerUserToEvent(Long userId, Long eventId);
+    public Registration getRegistrationForSpecificEvent(Long eventId);
+
+}
+
+
+RegistrationServiceImpl.java
+----------------------------
+package com.example.EventEase.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.EventEase.repository.RegistrationRepository;
+import com.example.EventEase.domain.Registration;
+
+@Service
+public class RegistrationServiceImpl implements RegistrationService {
+    @Autowired
+    private RegistrationRepository registrationRepository;
+
+    @Override
+    public List<Registration> getAllRegistrations() {
+        return registrationRepository.findAll();
+    }
+    @Override
+    public Registration createRegistration(Registration registration) {
+        return registrationRepository.save(registration);
+    }
+    
+    @Override
+    public Registration registerUserToEvent(Long userId, Long eventId) {
+        Registration registration = new Registration();
+        registration.setUser_id(userId);
+        registration.setEvent_id(eventId);
+        return registrationRepository.save(registration);
+    }
+    @Override
+    public Registration getRegistrationForSpecificEvent(Long eventId) {
+        return registrationRepository.findByEvent_id(eventId);
+    }
+    
+  
+    
+}
+
+
+
+---------------------------------------------------
+6. com.example.EventEase.controller
+---------------------------------------------------
+
+UserController.java
+-------------------
+package com.example.EventEase.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.example.EventEase.service.UserService;
+
+import jakarta.validation.Valid;
+
+import com.example.EventEase.domain.User;
+import com.example.EventEase.dto.UserRequestDTO;
+import com.example.EventEase.dto.UserResponseDTO;
+import com.example.EventEase.mapper.UserMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @GetMapping("/all")
+    public List<UserResponseDTO> getallusers(){
+        List<UserResponseDTO> list = new ArrayList<>();
+        for(User user : userService.getAllUsers()) {
+            list.add(userMapper.toResponse(user));
+        }
+        return list;
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(Long id) {
+        return userService.getUserById(id);
+    }
+
+    @PostMapping("/create")
+    public User requestUser(@Valid @RequestBody UserRequestDTO requestdto){
+    return userService.createUser(UserMapper.toEntity(requestdto));
+    }
+
+    @PutMapping("/update/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return "User with ID " + id + " deleted successfully.";
+    }
+}
+
+
+EventController.java
+--------------------
+package com.example.EventEase.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.example.EventEase.service.EventService;
+import com.example.EventEase.mapper.EventMapper;
+import com.example.EventEase.dto.EventResponseDTO;
+import com.example.EventEase.domain.Event;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+@RestController
+@RequestMapping("/api/events")
+public class EventController {
+    
+    @Autowired
+    private EventService eventService;
+    
+
+    @GetMapping("/all")
+    public List<EventResponseDTO> getAllEvents() {
+        List<EventResponseDTO> list = new ArrayList<>();
+        for (Event event : eventService.getAllEvents()) {
+            list.add(EventMapper.mapToResponse(event));
+        }
+        return list;
+    }
+
+    @PostMapping("/create")
+    public EventResponseDTO createEvent(@RequestBody EventResponseDTO eventResponseDTO) {
+        Event event = EventMapper.mapToEvent(eventResponseDTO);
+        Event createdEvent = eventService.createEvent(event);
+        return EventMapper.mapToResponse(createdEvent);
+    }
+
+    @PutMapping("/update/{id}")
+    public EventResponseDTO updateEvent(@PathVariable Long id, @RequestBody EventResponseDTO eventResponseDTO) {
+        Event event = EventMapper.mapToEvent(eventResponseDTO);
+        Event updatedEvent = eventService.updateEvent(id, event);
+        return updatedEvent != null ? EventMapper.mapToResponse(updatedEvent) : null;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteEvent(@PathVariable Long id) {
+        eventService.deleteEvent(id);
+        return "Event with ID " + id + " deleted successfully.";
+    }
+}
+
+
+RegistrationController.java
+---------------------------
+package com.example.EventEase.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import com.example.EventEase.domain.Registration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.EventEase.domain.User;
+import com.example.EventEase.dto.RegistrationResponseDTO;
+import com.example.EventEase.dto.UserResponseDTO;
+import com.example.EventEase.mapper.RegistrationMapper;
+import com.example.EventEase.service.RegistrationService;
+
+@RestController
+@RequestMapping("/api/registrations")
+public class RegistrationController {
+    
+    @Autowired
+    private RegistrationService registrationService;
+
+    @Autowired
+    public RegistrationMapper registrationMapper;
+
+    @GetMapping("/all")
+    public List<RegistrationResponseDTO> getallRegistrations(){
+        List<RegistrationResponseDTO> list = new ArrayList<>();
+        for(Registration register : registrationService.getAllRegistrations()) {
+            list.add(registrationMapper.toResponse(register));
+        }
+        return list;
+    }
+
+    @PostMapping("/create")
+    public RegistrationResponseDTO createRegistration(@RequestBody Registration registration) {
+        Registration createdRegistration = registrationService.createRegistration(registration);
+        return registrationMapper.toResponse(createdRegistration);
+    }
+
+    @PutMapping("/register/{userId}/{eventId}")
+    public Registration registerUserToEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+        return registrationService.registerUserToEvent(userId, eventId);
+    }
+
+    @GetMapping("/event/{eventId}")
+    public Registration getRegistrationForSpecificEvent(@PathVariable Long eventId) {
+        return registrationService.getRegistrationForSpecificEvent(eventId);
+    }
+}
+
+---------------------------------------------------
+7. com.example.EventEase.exceptions
+---------------------------------------------------
+
+ResourseNotFoundException.java
+---------------------------------
+package com.example.EventEase.exceptions;
+
+public class ResourceNotFoundException extends RuntimeException{
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+} 
+
+
+UserAlreadyExistException.java
+---------------------------------
+package com.example.EventEase.exceptions;
+
+public class UserAlreadyExistException extends RuntimeException {
+    public UserAlreadyExistException(String message) {
+        super(message);
+    }
+}
+
+
+GlobalExceptionHandler.java
+---------------------------------
+package com.example.EventEase.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<String> handleUserAlreadyExist(UserAlreadyExistException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> InternalServerError(Exception ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+}
+
+
+
+---------------------------------------------------
+8. com.example.EventEase
+---------------------------------------------------
+
+EventEaseApplication.java
+------------------------
+package com.example.EventEase;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class EventEaseApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(EventEaseApplication.class, args);
+	}
+
+}
+
+
+---------------------------------------------------
