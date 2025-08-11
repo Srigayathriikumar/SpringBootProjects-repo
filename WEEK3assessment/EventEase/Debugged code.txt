@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ERROR CODE:
 -----------
 
@@ -38,3 +39,46 @@ public class EventServiceImpl implements EventService {
     }
 }
 
+=======
+ERROR CODE:
+-----------
+
+public class EventServiceImpl implements EventService {
+    
+    @Autowired
+    private EventRepository eventRepo;
+    
+    @Override
+    public Event createEvent(Event event) {
+        if(event.getTitle().length() < 0) {
+            throw new RuntimeException("Invalid title");
+        }
+        return eventRepo.save(event);
+    }
+}
+
+---------------------------------------------------------------------------------
+
+COOKED CODE:
+------------
+
+@Service
+public class EventServiceImpl implements EventService {
+ 
+    @Autowired
+    private EventRepository eventRepository;
+ 
+    @Override
+    public Event createEvent(Event event) {
+
+        // length() < 0 is never true,should check whether it is null or empty
+
+        if (event.getTitle() == null || event.getTitle().trim().isEmpty()) {
+            throw new RuntimeException("Invalid title");
+        }
+        return eventRepository.save(event);
+    }
+}
+
+
+>>>>>>> 9d16e797ec37261e58ee7f43a54db443cc3b641d
