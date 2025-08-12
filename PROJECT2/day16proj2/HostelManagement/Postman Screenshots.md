@@ -14,8 +14,9 @@
 
 ## Console error message:
 
--> http://localhost:9093/students/108/Dr . John
--> http://localhost:9093/students/room/108
--> http://localhost:9093/students/staff/Dr. Bella
+- http://localhost:9093/students/108/Dr . John
+- http://localhost:9093/students/room/108
+- http://localhost:9093/students/staff/Dr. Bella
 
 <img width="1072" height="361" alt="Screenshot 2025-08-12 101113" src="https://github.com/user-attachments/assets/6d91e81f-b469-40bf-8272-6299499d2724" />
+
