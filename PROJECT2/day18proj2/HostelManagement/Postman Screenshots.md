@@ -21,3 +21,27 @@
 <img width="1072" height="361" alt="Screenshot 2025-08-12 101113" src="https://github.com/user-attachments/assets/6d91e81f-b469-40bf-8272-6299499d2724" />
 
 
+## Access Validations for ADMIN and USERS:
+
+## Read access for ADMIN and USER:
+
+<img width="1129" height="853" alt="Screenshot 2025-08-13 104024" src="https://github.com/user-attachments/assets/bcac7903-bd0d-4140-972d-e83b55cb372c" />
+
+## create access for ADMIN:
+
+<img width="1142" height="678" alt="Screenshot 2025-08-13 203457" src="https://github.com/user-attachments/assets/63e5d240-9368-4214-851b-cbbe07c8ce15" />
+
+<img width="1144" height="590" alt="Screenshot 2025-08-13 203656" src="https://github.com/user-attachments/assets/4b8bf214-2f38-49bf-b55f-5c086148c10e" />
+
+## Update access for ADMIN:
+
+<img width="1127" height="628" alt="Screenshot 2025-08-13 203916" src="https://github.com/user-attachments/assets/4265cd6f-d517-4eab-b142-12d245bbdff0" />
+
+<img width="1128" height="629" alt="Screenshot 2025-08-13 203726" src="https://github.com/user-attachments/assets/9f0e1c72-ff5c-4b85-a02a-346a348fa6ad" />
+
+## delete access for ADMIN:
+
+<img width="1119" height="365" alt="Screenshot 2025-08-13 204002" src="https://github.com/user-attachments/assets/ca3931b2-3dd3-41d3-a334-379cbea79aed" />
+
+
+
