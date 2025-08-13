@@ -15,3 +15,11 @@
 ## Filter for project:
 
 <img width="1135" height="856" alt="Screenshot 2025-08-11 135921" src="https://github.com/user-attachments/assets/51bc74fa-a273-4e00-af44-09cea9616450" />
+
+## Pagination and Sorting outputs:
+
+<img width="1146" height="870" alt="Screenshot 2025-08-12 113818" src="https://github.com/user-attachments/assets/93e79d3c-7800-4c63-ab9c-18f056fb7704" />
+
+<img width="1115" height="881" alt="Screenshot 2025-08-12 164322" src="https://github.com/user-attachments/assets/b1071700-ecfa-4e99-9572-1e33388b94fd" />
+
+<img width="1113" height="881" alt="Screenshot 2025-08-13 102303" src="https://github.com/user-attachments/assets/5c769e8a-fd95-4021-ac45-0124cecbcd4a" />
