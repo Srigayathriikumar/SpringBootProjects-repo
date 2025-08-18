@@ -8,6 +8,7 @@ import com.example.BankProApplication.domain.Transaction;
 import com.example.BankProApplication.dto.TransactionResponseDTO;
 import com.example.BankProApplication.mapper.TransactionMapper;
 import com.example.BankProApplication.service.TransactionService;
+import com.example.BankProApplication.repository.AccountRepository;
 
 @RestController
 @RequestMapping("/transactions")
@@ -18,6 +19,9 @@ public class TransactionController {
 
     @Autowired
     private TransactionMapper transactionMapper;
+    
+    @Autowired
+    private AccountRepository accountRepository;
 
     @GetMapping
     public List<TransactionResponseDTO> getAllTransactionHistory() {
@@ -39,12 +43,12 @@ public class TransactionController {
         return list;
     }
 
-    @PostMapping("/transfer")
-    public TransactionResponseDTO createTransaction(@RequestParam Long fromAccountId, @RequestParam Long toAccountId, @RequestParam double amount) {
-        Transaction transaction = transactionService.createTransactionbetweenAccounts(fromAccountId, toAccountId, amount);
-        if (transaction != null) {
-            return transactionMapper.toResponse(transaction);
-        }
-        return null; 
+    
+    
+    @PostMapping("/{fromAccountNumber}/{toAccountNumber}/{amount}")
+    public Transaction createTransactionByAccountNumber(@PathVariable String fromAccountNumber, @PathVariable String toAccountNumber, @PathVariable double amount) {
+        Long fromAccountId = accountRepository.findByAccountNumber(fromAccountNumber).getId();
+        Long toAccountId = accountRepository.findByAccountNumber(toAccountNumber).getId();
+        return transactionService.createTransactionbetweenAccounts(fromAccountId, toAccountId, amount);
     }
 }

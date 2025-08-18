@@ -1,0 +1,1239 @@
+# BankPro Application - Java Files Documentation
+
+## Main Application File
+
+### BankProApplication.java
+```java
+package com.example.BankProApplication;
+import com.example.BankProApplication.domain.Account;
+import com.example.BankProApplication.repository.*;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import com.example.BankProApplication.domain.*;
+import java.util.Date;
+
+@SpringBootApplication
+public class BankProApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BankProApplication.class, args);
+	}
+@Bean
+    public CommandLineRunner loadData(CustomerRepository customerRepository, AccountRepository accountRepository, TransactionRepository transactionRepository) {
+		return (args) -> {
+			
+			Customer c1 = new Customer(null, "John Doe", "john@email.com", "1234567890");
+			Customer c2 = new Customer(null, "Jane Smith", "jane@email.com", "0987654321");
+			Customer c3 = new Customer(null, "Bob Johnson", "bob@email.com", "1122334455");
+			Customer c4 = new Customer(null, "Alice Brown", "alice@email.com", "5566778899");
+			Customer c5 = new Customer(null, "Charlie Wilson", "charlie@email.com", "9988776655");
+			customerRepository.save(c1);
+			customerRepository.save(c2);
+			customerRepository.save(c3);
+			customerRepository.save(c4);
+			customerRepository.save(c5);
+
+			Account a1 = new Account(null, "ACC001", "Savings", 1000.0, c1);
+			Account a2 = new Account(null, "ACC002", "Current", 2000.0, c2);
+			Account a3 = new Account(null, "ACC003", "Savings", 1500.0, c3);
+			Account a4 = new Account(null, "ACC004", "Current", 3000.0, c4);
+			Account a5 = new Account(null, "ACC005", "Savings", 2500.0, c5);
+			accountRepository.save(a1);
+			accountRepository.save(a2);
+			accountRepository.save(a3);
+			accountRepository.save(a4);
+			accountRepository.save(a5);
+
+			Transaction t1 = new Transaction(null, new Date(), 100.0, "Credit", a1);
+			Transaction t2 = new Transaction(null, new Date(), 200.0, "Debit", a2);
+			Transaction t3 = new Transaction(null, new Date(), 150.0, "Credit", a2);
+			Transaction t4 = new Transaction(null, new Date(), 300.0, "Debit", a4);
+			Transaction t5 = new Transaction(null, new Date(), 250.0, "Credit", a5);
+			transactionRepository.save(t1);
+			transactionRepository.save(t2);
+			transactionRepository.save(t3);
+			transactionRepository.save(t4);
+			transactionRepository.save(t5);
+		};
+	}
+}
+```
+
+## Configuration Files
+
+### SecurityConfig.java
+```java
+package com.example.BankProApplication.config;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
+import org.springframework.context.annotation.*;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+@Configuration
+
+public class SecurityConfig {
+ 
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        UserDetails admin = User.withUsername("admin")
+        .password("{noop}admin")
+        .roles("ADMIN")
+        .build();
+        
+        UserDetails user = User.withUsername("user")
+        .password("{noop}user")
+        .roles("USER")
+        .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf->csrf.disable())
+                 .authorizeHttpRequests(auth->auth
+                 .requestMatchers("/accounts/admin/**").hasRole("ADMIN")
+                 .requestMatchers("/accounts/user/**").hasRole("USER")
+                 .requestMatchers("/accounts/**").hasAnyRole("ADMIN", "USER")
+                 .requestMatchers("/customers/admin/**").hasRole("ADMIN")
+                 .requestMatchers("/customers/user/**").hasRole("USER")
+                 .requestMatchers("/customers/**").hasAnyRole("ADMIN", "USER")
+                 .requestMatchers("/transactions/admin/**").hasRole("ADMIN")
+                 .requestMatchers("/transactions/user/**").hasRole("USER")
+                 .requestMatchers("/transactions/**").hasAnyRole("ADMIN", "USER")
+                 .anyRequest().authenticated()
+                 )
+                 .httpBasic();
+
+        return http.build();
+    }
+}
+```
+
+## Controller Files
+
+### AccountController.java
+```java
+package com.example.BankProApplication.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import com.example.BankProApplication.domain.Account;
+import com.example.BankProApplication.dto.AccountResponseDTO;
+import com.example.BankProApplication.service.AccountService;
+@RestController
+@RequestMapping("/accounts")
+public class AccountController {
+    
+    @Autowired
+    private AccountService accountService;
+
+    @GetMapping
+    public List<AccountResponseDTO> getAllAccounts() {
+        return accountService.getAllAccounts();
+    }
+
+    @PostMapping("/admin")
+    public Account createAccount(@RequestBody Account account) {
+        return accountService.createAccount(account);
+    }
+
+    @GetMapping("/{id}")
+    public AccountResponseDTO getAccountById(@PathVariable Long id){
+        return accountService.getAccountById(id);
+    }
+
+    @PutMapping("/admin/{id}")
+    public Account updateAccount(@PathVariable Long id, @RequestBody Account account) {
+        account.setId(id);
+        return accountService.updateAccount(account);
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public String deleteAccount(@PathVariable Long id) {
+        return accountService.deleteAccount(id);
+    }
+
+}
+```
+
+### CustomerController.java
+```java
+package com.example.BankProApplication.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import jakarta.validation.Valid;
+import com.example.BankProApplication.service.CustomerService;
+import com.example.BankProApplication.domain.Customer;
+import com.example.BankProApplication.dto.CustomerRequestDTO;
+import com.example.BankProApplication.dto.CustomerResponseDTO;
+import com.example.BankProApplication.mapper.CustomerMapper;
+@RestController
+@RequestMapping("/customers")
+public class CustomerController {
+    
+    @Autowired
+    private CustomerService customerService;
+
+    @GetMapping
+    public List<CustomerResponseDTO> getAllCustomers(){
+        List<CustomerResponseDTO> list = new ArrayList<>();
+        for (Customer customer: customerService.getAllCustomers()) {
+            list.add(CustomerMapper.toResponse(customer));
+        }
+        return list;
+    }
+
+    @GetMapping("/{id}")
+    public CustomerResponseDTO getCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.getCustomerById(id);
+        if (customer != null) {
+            return CustomerMapper.toResponse(customer);
+        }
+        return null; 
+    }
+    @PostMapping("/admin")
+    public CustomerRequestDTO createCustomer(@RequestBody @Valid CustomerRequestDTO customer) {
+         customerService.createCustomer(customer);
+        return customer;
+    }
+    @PutMapping("/admin/{id}")
+    public CustomerResponseDTO updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+        customer.setId(id);
+        Customer updatedCustomer = customerService.updateCustomer(customer);
+        if (updatedCustomer != null) {
+            return CustomerMapper.toResponse(updatedCustomer);
+        }
+        return null; 
+    }
+    @DeleteMapping("/admin/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        return customerService.deleteCustomer(id);
+    }
+
+}
+```
+
+### TransactionController.java
+```java
+package com.example.BankProApplication.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.BankProApplication.domain.Transaction;
+import com.example.BankProApplication.dto.TransactionResponseDTO;
+import com.example.BankProApplication.mapper.TransactionMapper;
+import com.example.BankProApplication.service.TransactionService;
+import com.example.BankProApplication.repository.AccountRepository;
+
+@RestController
+@RequestMapping("/transactions")
+public class TransactionController {
+    
+    @Autowired
+    private TransactionService transactionService;
+
+    @Autowired
+    private TransactionMapper transactionMapper;
+    
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @GetMapping
+    public List<TransactionResponseDTO> getAllTransactionHistory() {
+        List<TransactionResponseDTO> list = new ArrayList<>();
+        for (Transaction transaction : transactionService.getAllTransactionHistory()) {
+            list.add(transactionMapper.toResponse(transaction));
+        }
+        return list;
+    }
+
+    @GetMapping("/{accountId}")
+    public List<TransactionResponseDTO> getTransactionHistory(@PathVariable Long accountId) {
+        List<TransactionResponseDTO> list = new ArrayList<>();
+        for (Transaction transaction : transactionService.getAllTransactionHistory()) {
+            if (transaction.getAccount().getId().equals(accountId) || transaction.getAccount().getId().equals(accountId)) {
+                list.add(transactionMapper.toResponse(transaction));
+            }
+        }
+        return list;
+    }
+
+    
+    
+    @PostMapping("/{fromAccountNumber}/{toAccountNumber}/{amount}")
+    public Transaction createTransactionByAccountNumber(@PathVariable String fromAccountNumber, @PathVariable String toAccountNumber, @PathVariable double amount) {
+        Long fromAccountId = accountRepository.findByAccountNumber(fromAccountNumber).getId();
+        Long toAccountId = accountRepository.findByAccountNumber(toAccountNumber).getId();
+        return transactionService.createTransactionbetweenAccounts(fromAccountId, toAccountId, amount);
+    }
+}
+```
+
+## Domain Files
+
+### Account.java
+```java
+package com.example.BankProApplication.domain;
+
+import jakarta.persistence.*;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
+@Table(name = "accounts")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Account {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String accountNumber;
+    private String accountType;
+    private Double balance;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Transaction> transactions;
+
+    public Account() {}
+
+    public Account(Long id, String accountNumber, String accountType, Double balance, Customer customer) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.balance = balance;
+        this.customer = customer;
+    }
+
+    public Long getId() {
+         return id;
+         }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
+    public String getAccountNumber() { 
+        return accountNumber; 
+    }
+    public void setAccountNumber(String accountNumber) {
+         this.accountNumber = accountNumber; 
+        }
+    public String getAccountType() { 
+        return accountType;
+     }
+    public void setAccountType(String accountType) { 
+        this.accountType = accountType;
+     }
+    public Double getBalance() {
+         return balance; 
+        }
+    public void setBalance(Double balance) { 
+        this.balance = balance;
+     }
+    public Customer getCustomer() {
+         return customer; 
+        }
+    public void setCustomer(Customer customer) {
+         this.customer = customer; 
+        }
+    public List<Transaction> getTransactions() {
+         return transactions; 
+        }
+    public void setTransactions(List<Transaction> transactions) {
+         this.transactions = transactions; 
+        }
+}
+```
+
+### Customer.java
+```java
+package com.example.BankProApplication.domain;
+
+import jakarta.persistence.*;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Email;
+@Entity
+@Table (name = "customers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Customer {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    @Email(message = "Invalid email format")
+    private String email;
+    private String phoneNumber;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Account> accounts;
+
+    public Customer() {
+    }
+
+    public Customer(Long id, String name, String email, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+}
+```
+
+### Transaction.java
+```java
+package com.example.BankProApplication.domain;
+import java.util.Date;
+import java.util.List;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
+@Table(name = "transactions")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Transaction {
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    private Date transactionDate;
+    private Double amount;
+    private String transactionType; 
+   
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+   
+
+    public Transaction() {
+    }
+    public Transaction(Long id, Date transactionDate, Double amount, String transactionType, Account account) {
+        this.id = id;
+        this.transactionDate = transactionDate;
+        this.amount = amount;
+        this.transactionType = transactionType;
+        this.account = account;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+    public Double getAmount() {
+        return amount;
+    }
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+    public String getTransactionType() {
+        return transactionType;
+    }
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+    public Account getAccount() {
+        return account;
+    }
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    
+
+}
+```
+
+## DTO Files
+
+### AccountRequestDTO.java
+```java
+package com.example.BankProApplication.dto;
+
+import com.example.BankProApplication.domain.Customer;
+
+import jakarta.validation.constraints.*;
+
+public class AccountRequestDTO {
+    
+    
+    private Long id;
+    @NotBlank(message = "Account number is mandatory")
+    private String accountNumber;
+    @Pattern(regexp="^Savings|Current$", message="Account type must be either Savings or Current")
+    private String accountType;
+    @NotNull(message = "Balance cannot be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Balance must be greater than zero")
+    private Double balance;
+
+    public AccountRequestDTO() {
+    }
+
+    public AccountRequestDTO(Long id,String accountNumber,String accountType,Double balance) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.balance = balance;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+    public String getAccountType() {
+        return accountType;
+    }
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+    public Double getBalance() {
+        return balance;
+    }
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public Customer getCustomer() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCustomer'");
+    }
+
+    
+}
+```
+
+### AccountResponseDTO.java
+```java
+package com.example.BankProApplication.dto;
+
+import com.example.BankProApplication.domain.Customer;
+
+public class AccountResponseDTO {
+    private Long id;
+    private String accountNumber;
+    private String accountType;
+    private Double balance;
+    private Customer customer;
+    public AccountResponseDTO() {
+    }
+    public AccountResponseDTO(Long id, String accountNumber, String accountType, Double balance, Customer customer) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.balance = balance;
+        this.customer = customer;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+    public String getAccountType() {
+        return accountType;
+    }
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+    public Double getBalance() {
+        return balance;
+    }
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+    public Customer getCustomer() {
+        return customer;
+    }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    
+    
+}
+```
+
+### CustomerRequestDTO.java
+```java
+package com.example.BankProApplication.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+public class CustomerRequestDTO {
+
+    private Long id;
+    @NotBlank(message = "Name is mandatory")
+    private String name;
+    @Email(message = "Email should be valid")
+    private String email;
+    @NotBlank(message = "Phone number is mandatory")
+    private String phoneNumber;
+
+    public CustomerRequestDTO() {
+    }
+    public CustomerRequestDTO(Long id, String name, String email, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    
+}
+```
+
+### CustomerResponseDTO.java
+```java
+package com.example.BankProApplication.dto;
+
+public class CustomerResponseDTO {
+    private Long id;
+    private String name;
+    private String email;
+    private String phoneNumber;
+
+    public CustomerResponseDTO() {
+    }
+
+    public CustomerResponseDTO(Long id, String name, String email, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    
+}
+```
+
+### TransactionResponseDTO.java
+```java
+package com.example.BankProApplication.dto;
+import com.example.BankProApplication.domain.Account;
+import java.util.Date;
+
+public class TransactionResponseDTO {
+     private Long id;
+    private Date transactionDate;
+    private Double amount;
+    private String transactionType; 
+    private Account account;
+
+    public TransactionResponseDTO() {
+    }
+    public TransactionResponseDTO(Long id, Date transactionDate, Double amount, String transactionType, Account account) {
+        this.id = id;
+        this.transactionDate = transactionDate;
+        this.amount = amount;
+        this.transactionType = transactionType;
+        this.account = account;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+    public Double getAmount() {
+        return amount;
+    }
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+    public String getTransactionType() {
+        return transactionType;
+    }
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+    public Account getAccount() {
+        return account;
+    }
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    
+}
+```
+
+## Exception Files
+
+### EntityNotFoundException.java
+```java
+package com.example.BankProApplication.exceptions;
+
+public class EntityNotFoundException extends RuntimeException{
+    public EntityNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
+### GlobalExceptionHandler.java
+```java
+package com.example.BankProApplication.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<String> handleInsufficientBalance(InsufficientBalanceException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> InternalServerError(Exception ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+}
+```
+
+### InsufficientBalanceException.java
+```java
+package com.example.BankProApplication.exceptions;
+
+
+public class InsufficientBalanceException extends RuntimeException{
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+```
+
+## Mapper Files
+
+### AccountMapper.java
+```java
+package com.example.BankProApplication.mapper;
+
+import org.springframework.stereotype.Component;
+import com.example.BankProApplication.dto.AccountResponseDTO;
+import com.example.BankProApplication.domain.Account;
+import com.example.BankProApplication.dto.AccountRequestDTO;
+
+@Component
+public class AccountMapper {
+    
+    public static AccountResponseDTO toResponse(Account account) {
+        AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
+        accountResponseDTO.setId(account.getId());
+        accountResponseDTO.setAccountNumber(account.getAccountNumber());
+        accountResponseDTO.setBalance(account.getBalance());
+        accountResponseDTO.setCustomer(account.getCustomer());
+        return accountResponseDTO;
+    }
+
+    public static Account toEntity(AccountRequestDTO accountRequestDTO) {
+        Account account = new Account();
+        account.setId(accountRequestDTO.getId());
+        account.setAccountNumber(accountRequestDTO.getAccountNumber());
+        account.setAccountType(accountRequestDTO.getAccountType());
+        account.setBalance(accountRequestDTO.getBalance());
+        account.setCustomer(accountRequestDTO.getCustomer());
+        return account;
+    }
+}
+```
+
+### CustomerMapper.java
+```java
+package com.example.BankProApplication.mapper;
+
+import org.springframework.stereotype.Component;
+import com.example.BankProApplication.dto.CustomerRequestDTO;
+import com.example.BankProApplication.dto.CustomerResponseDTO;
+import com.example.BankProApplication.domain.Customer;
+@Component
+public class CustomerMapper {
+    
+    public static CustomerResponseDTO toResponse(Customer customer) {
+        CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
+        customerResponseDTO.setId(customer.getId());
+        customerResponseDTO.setName(customer.getName());
+        customerResponseDTO.setEmail(customer.getEmail());
+        customerResponseDTO.setPhoneNumber(customer.getPhoneNumber());
+        return customerResponseDTO;
+    }
+
+    public static Customer toEntity(CustomerRequestDTO customerRequestDTO) {
+        Customer customer = new Customer();
+        customer.setId(customerRequestDTO.getId());
+        customer.setName(customerRequestDTO.getName());
+        customer.setEmail(customerRequestDTO.getEmail());
+        customer.setPhoneNumber(customerRequestDTO.getPhoneNumber());
+        return customer;
+    }
+}
+```
+
+### TransactionMapper.java
+```java
+package com.example.BankProApplication.mapper;
+
+import org.springframework.stereotype.Component;
+import com.example.BankProApplication.dto.TransactionResponseDTO;
+import com.example.BankProApplication.domain.Transaction;
+
+@Component
+public class TransactionMapper {
+
+    public static TransactionResponseDTO toResponse(Transaction transaction) {
+        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO();
+        transactionResponseDTO.setId(transaction.getId());
+        transactionResponseDTO.setTransactionDate(transaction.getTransactionDate());
+        transactionResponseDTO.setAmount(transaction.getAmount());
+        transactionResponseDTO.setTransactionType(transaction.getTransactionType());
+        transactionResponseDTO.setAccount(transaction.getAccount());
+        return transactionResponseDTO;
+    }
+
+    public static Transaction toEntity(TransactionResponseDTO transactionResponseDTO) {
+        Transaction transaction = new Transaction();
+        transaction.setId(transactionResponseDTO.getId());
+        transaction.setTransactionDate(transactionResponseDTO.getTransactionDate());
+        transaction.setAmount(transactionResponseDTO.getAmount());
+        transaction.setTransactionType(transactionResponseDTO.getTransactionType());
+        transaction.setAccount(transactionResponseDTO.getAccount());
+        return transaction;
+    }
+}
+```
+
+## Repository Files
+
+### AccountRepository.java
+```java
+package com.example.BankProApplication.repository;
+import com.example.BankProApplication.domain.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface AccountRepository extends JpaRepository<Account,Long>{
+    Account findByAccountNumber(String accountNumber);
+} 
+```
+
+### CustomerRepository.java
+```java
+package com.example.BankProApplication.repository;
+import com.example.BankProApplication.domain.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface CustomerRepository extends JpaRepository<Customer,Long>{
+
+} 
+```
+
+### TransactionRepository.java
+```java
+package com.example.BankProApplication.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.example.BankProApplication.domain.Transaction;
+
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+    Page<Transaction> findByAccountId(Long accountId, Pageable pageable);
+}
+```
+
+## Service Files
+
+### AccountService.java
+```java
+package com.example.BankProApplication.service;
+import com.example.BankProApplication.domain.Account;
+import com.example.BankProApplication.dto.AccountResponseDTO;
+import java.util.List;
+
+public interface AccountService {
+    public Account createAccount(Account account);
+    public AccountResponseDTO getAccountById(Long id);
+    public List<AccountResponseDTO> getAllAccounts();
+    public Account updateAccount(Account account);
+    public String deleteAccount(Long id);
+}
+```
+
+### AccountServiceImpl.java
+```java
+package com.example.BankProApplication.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.BankProApplication.domain.Account;
+import java.util.List;
+import java.util.stream.Collectors;
+import com.example.BankProApplication.repository.AccountRepository;
+import com.example.BankProApplication.dto.*;
+
+@Service
+public class AccountServiceImpl implements AccountService {
+    
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Override
+    public Account createAccount(Account account) {
+        return accountRepository.save(account);
+    }
+    
+    @Override
+    public AccountResponseDTO getAccountById(Long id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account == null) {
+            return null;
+        }
+        return new AccountResponseDTO(account.getId(), account.getAccountNumber(), 
+                                    account.getAccountType(), account.getBalance(), account.getCustomer());
+    }
+    
+    @Override
+    public List<AccountResponseDTO> getAllAccounts() {
+        return accountRepository.findAll().stream()
+                .map(account -> new AccountResponseDTO(account.getId(), account.getAccountNumber(),
+                        account.getAccountType(), account.getBalance(), account.getCustomer()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Account updateAccount(Account account) {
+        if (accountRepository.existsById(account.getId())) {
+            accountRepository.save(account);
+        }
+        return account;
+    }
+
+    @Override
+    public String deleteAccount(Long id) {
+        if (accountRepository.existsById(id)) {
+            accountRepository.deleteById(id);
+        }
+        return "Account deleted successfully";
+    }
+}
+```
+
+### CustomerService.java
+```java
+package com.example.BankProApplication.service;
+import com.example.BankProApplication.domain.Customer;
+import com.example.BankProApplication.dto.CustomerRequestDTO;
+import com.example.BankProApplication.dto.CustomerResponseDTO;
+
+import java.util.List;
+public interface CustomerService {
+    public CustomerRequestDTO createCustomer(CustomerRequestDTO customer);
+    public Customer getCustomerById(Long id);
+    public List<Customer> getAllCustomers();
+    public Customer updateCustomer(Customer customer);
+    public String deleteCustomer(Long id);
+}
+```
+
+### CustomerServiceImpl.java
+```java
+package com.example.BankProApplication.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.BankProApplication.domain.Customer;
+import com.example.BankProApplication.dto.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.example.BankProApplication.repository.CustomerRepository;
+
+@Service
+public class CustomerServiceImpl implements CustomerService {
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Override
+    public CustomerRequestDTO createCustomer(CustomerRequestDTO customer){
+        Customer customerno = new Customer(null, customer.getName(), customer.getEmail(), customer.getPhoneNumber());
+        customerRepository.save(customerno);
+        return new CustomerRequestDTO (customerno.getId(), customerno.getName(), customerno.getEmail(), customerno.getPhoneNumber());
+    }
+    @Override
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id).orElse(null);
+
+    }
+    @Override
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll().stream()
+                .collect(Collectors.toList());
+    }
+    @Override
+    public Customer updateCustomer(Customer customer) {
+        if (customerRepository.existsById(customer.getId())) {
+            customerRepository.save(customer);
+        }
+        return customerRepository.findById(customer.getId()).orElse(null);
+    }
+    @Override
+    public String deleteCustomer(Long id) {
+        if (customerRepository.existsById(id)) {
+            customerRepository.deleteById(id);
+            return "Customer with ID " + id + " deleted successfully.";
+        }
+        return "Customer with ID " + id + " does not exist.";
+    }
+    
+    
+}
+```
+
+### TransactionService.java
+```java
+package com.example.BankProApplication.service;
+import com.example.BankProApplication.domain.Transaction;
+import com.example.BankProApplication.dto.TransactionResponseDTO;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
+public interface TransactionService {
+    public Transaction createTransactionbetweenAccounts(Long fromAccountId, Long toAccountId, double amount);
+    public List<Transaction> getAllTransactionHistory();
+    Page<TransactionResponseDTO> getTransactionHistory(Long accountId, int page, int size);
+
+}
+```
+
+### TransactionServiceImpl.java
+```java
+package com.example.BankProApplication.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import com.example.BankProApplication.repository.TransactionRepository;
+import com.example.BankProApplication.repository.AccountRepository;
+import com.example.BankProApplication.domain.Transaction;
+import com.example.BankProApplication.domain.Account;
+import com.example.BankProApplication.dto.TransactionResponseDTO;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;
+
+@Service
+public class TransactionServiceImpl implements TransactionService{
+    
+    @Autowired
+    private TransactionRepository transactionRepository;
+    
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Override
+    public Transaction createTransactionbetweenAccounts(Long fromAccountId, Long toAccountId, double amount) {
+        Account fromAccount = accountRepository.findById(fromAccountId).orElse(null);
+        Account toAccount = accountRepository.findById(toAccountId).orElse(null);
+        
+        if (fromAccount == null || toAccount == null || fromAccount.getBalance() < amount) {
+            return null;
+        }
+        
+        fromAccount.setBalance(fromAccount.getBalance() - amount);
+        toAccount.setBalance(toAccount.getBalance() + amount);
+        
+        Transaction debitTransaction = new Transaction(null, new Date(), amount, "Debit", fromAccount);
+        Transaction creditTransaction = new Transaction(null, new Date(), amount, "Credit", toAccount);
+        
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+        transactionRepository.save(debitTransaction);
+        transactionRepository.save(creditTransaction);
+        
+       return debitTransaction;
+    }
+
+    @Override
+    public List<Transaction> getAllTransactionHistory() {
+        return transactionRepository.findAll().stream()
+                .map(transaction -> new Transaction(
+                        transaction.getId(),
+                        transaction.getTransactionDate(),
+                        transaction.getAmount(),
+                        transaction.getTransactionType(),
+                        transaction.getAccount()))
+                .collect(Collectors.toList());
+    }
+     
+    @Override
+    public Page<TransactionResponseDTO> getTransactionHistory(Long accountId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return transactionRepository.findByAccountId(accountId, pageable)
+                .map(transaction -> new TransactionResponseDTO(transaction.getId(), transaction.getTransactionDate(),
+                        transaction.getAmount(), transaction.getTransactionType(), transaction.getAccount()));
+    }
+}
+```

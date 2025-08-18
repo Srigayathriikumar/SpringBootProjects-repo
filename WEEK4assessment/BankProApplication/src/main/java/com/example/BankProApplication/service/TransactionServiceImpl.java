@@ -44,7 +44,7 @@ public class TransactionServiceImpl implements TransactionService{
         transactionRepository.save(debitTransaction);
         transactionRepository.save(creditTransaction);
         
-        return debitTransaction; 
+       return debitTransaction;
     }
 
     @Override

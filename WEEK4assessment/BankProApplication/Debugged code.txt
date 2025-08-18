@@ -1,0 +1,69 @@
+
+ given the following buggy service code for money transfer. Identify issues, fix logic, and explain your corrections:
+
+```java
+@Transactional
+public void transferMoney(String fromAccount, String toAccount, double amount) {
+    Account sender = accountRepository.findByAccountNumber(fromAccount);
+    Account receiver = accountRepository.findByAccountNumber(toAccount);
+
+    if(sender.getBalance() < amount) {
+        throw new RuntimeException("Insufficient funds");
+    }
+
+    sender.setBalance(sender.getBalance() - amount);
+    receiver.setBalance(receiver.getBalance() + amount);
+}
+```
+
+## Fixed Code:
+
+```java
+@Transactional
+public TransactionResponseDTO transferMoney(String fromAccount, String toAccount, double amount) {
+    // Input validation
+    if (amount <= 0) {
+        throw new IllegalArgumentException("Transfer amount must be positive");
+    }
+    
+    if (fromAccount.equals(toAccount)) {
+        throw new IllegalArgumentException("Cannot transfer to the same account");
+    }
+    
+    // Find accounts with null checks
+    Account sender = accountRepository.findByAccountNumber(fromAccount);
+    Account receiver = accountRepository.findByAccountNumber(toAccount);
+    
+    if (sender == null) {
+        throw new EntityNotFoundException("Sender account not found: " + fromAccount);
+    }
+    
+    if (receiver == null) {
+        throw new EntityNotFoundException("Receiver account not found: " + toAccount);
+    }
+    
+    // Check sufficient balance
+    if (sender.getBalance() < amount) {
+        throw new InsufficientBalanceException("Insufficient funds in account: " + fromAccount);
+    }
+    
+    // Update balances
+    sender.setBalance(sender.getBalance() - amount);
+    receiver.setBalance(receiver.getBalance() + amount);
+    
+    // Save updated accounts
+    accountRepository.save(sender);
+    accountRepository.save(receiver);
+    
+    // Create transaction records
+    Transaction debitTransaction = new Transaction(null, new Date(), amount, "Debit", sender);
+    Transaction creditTransaction = new Transaction(null, new Date(), amount, "Credit", receiver);
+    
+    transactionRepository.save(debitTransaction);
+    transactionRepository.save(creditTransaction);
+    
+    // Return transaction details
+    return new TransactionResponseDTO(debitTransaction.getId(), debitTransaction.getTransactionDate(),
+            debitTransaction.getAmount(), debitTransaction.getTransactionType(), debitTransaction.getAccount());
+}
+```
