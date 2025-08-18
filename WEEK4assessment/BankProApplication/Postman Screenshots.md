@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-### POSTMAN API TEST SCREENSHOTS:
-
-
-
-=======
 ### POSTMAN APIs TEST SCREENSHOTS:
 
 ## CUSTOMER APIs:
@@ -57,4 +51,3 @@
   <img width="1116" height="871" alt="Screenshot 2025-08-18 104747" src="https://github.com/user-attachments/assets/51a242b6-4da7-4325-94ff-f326e2a1aea5" />
 
   
->>>>>>> 0f8a467c43bb3629bc482b234dc88d69205b1631
