@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> fead5f4181cabc25d22bd586c1701921313742cf
 ### POSTMAN APIs TEST SCREENSHOTS:
 
 ## CUSTOMER APIs:
