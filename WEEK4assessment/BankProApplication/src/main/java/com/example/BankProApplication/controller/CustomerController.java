@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 import com.example.BankProApplication.service.CustomerService;
 import com.example.BankProApplication.domain.Customer;
+import com.example.BankProApplication.dto.CustomerRequestDTO;
 import com.example.BankProApplication.dto.CustomerResponseDTO;
 import com.example.BankProApplication.mapper.CustomerMapper;
 @RestController
@@ -16,36 +19,34 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private CustomerMapper customerMapper;
-
     @GetMapping
     public List<CustomerResponseDTO> getAllCustomers(){
         List<CustomerResponseDTO> list = new ArrayList<>();
         for (Customer customer: customerService.getAllCustomers()) {
-            list.add(customerMapper.toResponse(customer));
+            list.add(CustomerMapper.toResponse(customer));
         }
         return list;
     }
 
     @GetMapping("/{id}")
-    public CustomerResponseDTO getCustomerById(Long id) {
+    public CustomerResponseDTO getCustomerById(@PathVariable Long id) {
         Customer customer = customerService.getCustomerById(id);
         if (customer != null) {
-            return customerMapper.toResponse(customer);
+            return CustomerMapper.toResponse(customer);
         }
         return null; 
     }
     @PostMapping("/admin")
-    public CustomerResponseDTO createCustomer(@RequestBody Customer customer) {
-        Customer createdCustomer = customerService.createCustomer(customer);
-        return customerMapper.toResponse(createdCustomer);
+    public CustomerRequestDTO createCustomer(@RequestBody @Valid CustomerRequestDTO customer) {
+         customerService.createCustomer(customer);
+        return customer;
     }
     @PutMapping("/admin/{id}")
     public CustomerResponseDTO updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+        customer.setId(id);
         Customer updatedCustomer = customerService.updateCustomer(customer);
         if (updatedCustomer != null) {
-            return customerMapper.toResponse(updatedCustomer);
+            return CustomerMapper.toResponse(updatedCustomer);
         }
         return null; 
     }

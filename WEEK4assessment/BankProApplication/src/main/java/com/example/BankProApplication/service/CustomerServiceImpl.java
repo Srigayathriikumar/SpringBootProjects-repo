@@ -16,9 +16,10 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    public Customer createCustomer(Customer customer){
-        customerRepository.save(customer);
-        return customer;
+    public CustomerRequestDTO createCustomer(CustomerRequestDTO customer){
+        Customer customerno = new Customer(null, customer.getName(), customer.getEmail(), customer.getPhoneNumber());
+        customerRepository.save(customerno);
+        return new CustomerRequestDTO (customerno.getId(), customerno.getName(), customerno.getEmail(), customerno.getPhoneNumber());
     }
     @Override
     public Customer getCustomerById(Long id) {

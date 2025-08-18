@@ -2,9 +2,12 @@ package com.example.BankProApplication.domain;
 
 import jakarta.persistence.*;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "accounts")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Account {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +20,7 @@ public class Account {
     private Customer customer;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Transaction> transactions;
 
     public Account() {}

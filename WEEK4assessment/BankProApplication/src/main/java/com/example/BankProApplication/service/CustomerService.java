@@ -5,7 +5,7 @@ import com.example.BankProApplication.dto.CustomerResponseDTO;
 
 import java.util.List;
 public interface CustomerService {
-    public Customer createCustomer(Customer customer);
+    public CustomerRequestDTO createCustomer(CustomerRequestDTO customer);
     public Customer getCustomerById(Long id);
     public List<Customer> getAllCustomers();
     public Customer updateCustomer(Customer customer);

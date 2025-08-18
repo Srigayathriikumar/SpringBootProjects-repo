@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.example.BankProApplication.repository.AccountRepository;
 import com.example.BankProApplication.dto.*;
+
 @Service
 public class AccountServiceImpl implements AccountService {
     
@@ -15,26 +16,33 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(Account account) {
-        accountRepository.save(account);
-        return account;
+        return accountRepository.save(account);
     }
+    
     @Override
-    public Account getAccountById(Long id) {
-        return accountRepository.findById(id).orElse(null);
+    public AccountResponseDTO getAccountById(Long id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account == null) {
+            return null;
+        }
+        return new AccountResponseDTO(account.getId(), account.getAccountNumber(), 
+                                    account.getAccountType(), account.getBalance(), account.getCustomer());
     }
+    
     @Override
-    public List<Account> getAllAccounts() {
+    public List<AccountResponseDTO> getAllAccounts() {
         return accountRepository.findAll().stream()
+                .map(account -> new AccountResponseDTO(account.getId(), account.getAccountNumber(),
+                        account.getAccountType(), account.getBalance(), account.getCustomer()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Account updateAccount(Long id,Account account) {
-        if (accountRepository.existsById(id)) {
-            account.setId(id);
+    public Account updateAccount(Account account) {
+        if (accountRepository.existsById(account.getId())) {
             accountRepository.save(account);
         }
-        return accountRepository.findById(id).orElse(null);
+        return account;
     }
 
     @Override
@@ -42,7 +50,6 @@ public class AccountServiceImpl implements AccountService {
         if (accountRepository.existsById(id)) {
             accountRepository.deleteById(id);
         }
-        return "Account with ID " + id + " deleted successfully.";
+        return "Account deleted successfully";
     }
-
 }

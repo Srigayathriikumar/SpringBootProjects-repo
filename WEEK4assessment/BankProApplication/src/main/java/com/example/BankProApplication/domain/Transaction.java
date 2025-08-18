@@ -1,11 +1,12 @@
 package com.example.BankProApplication.domain;
 import java.util.Date;
 import java.util.List;
-
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "transactions")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Transaction {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
