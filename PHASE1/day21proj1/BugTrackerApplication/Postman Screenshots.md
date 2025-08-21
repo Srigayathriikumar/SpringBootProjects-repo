@@ -36,8 +36,9 @@
 
 <img width="1052" height="637" alt="Screenshot 2025-08-20 153038" src="https://github.com/user-attachments/assets/16c5d3ed-f3ed-43be-a55b-096927380887" />
 
+<img width="1038" height="498" alt="Screenshot 2025-08-20 153101" src="https://github.com/user-attachments/assets/85b2464e-8583-4185-af00-dc2619bbf4c0" />
+
 ## Swagger implementation:
 
 <img width="1882" height="891" alt="Screenshot 2025-08-21 125944" src="https://github.com/user-attachments/assets/213b7a83-2649-41ee-89c7-c9ee537a3f72" />
 
-<img width="1038" height="498" alt="Screenshot 2025-08-20 153101" src="https://github.com/user-attachments/assets/85b2464e-8583-4185-af00-dc2619bbf4c0" />
