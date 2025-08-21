@@ -11,6 +11,7 @@ This application provides endpoints to retrieve bug information based on various
 - Filter bugs by status, assignee, and project
 - Filter bugs by a combination of status, assignee, and project
 - Preloaded sample data on startup
+- Swagger implementation
 
 ## APIs
 
