@@ -31,3 +31,9 @@
 ## delete operation access for ADMIN:
 
 <img width="1122" height="524" alt="Screenshot 2025-08-13 200905" src="https://github.com/user-attachments/assets/e4bec456-d67e-4eb6-934b-2195fbb21c28" />
+
+## Developer validations:
+
+<img width="1052" height="637" alt="Screenshot 2025-08-20 153038" src="https://github.com/user-attachments/assets/16c5d3ed-f3ed-43be-a55b-096927380887" />
+
+<img width="1038" height="498" alt="Screenshot 2025-08-20 153101" src="https://github.com/user-attachments/assets/85b2464e-8583-4185-af00-dc2619bbf4c0" />
