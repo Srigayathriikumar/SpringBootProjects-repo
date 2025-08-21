@@ -43,5 +43,8 @@
 
 <img width="1119" height="365" alt="Screenshot 2025-08-13 204002" src="https://github.com/user-attachments/assets/ca3931b2-3dd3-41d3-a334-379cbea79aed" />
 
+## JWT token generation:
+
+<img width="1061" height="485" alt="Screenshot 2025-08-21 111426" src="https://github.com/user-attachments/assets/4eed7702-ec1c-4552-9942-92cefa39bc57" />
 
 
