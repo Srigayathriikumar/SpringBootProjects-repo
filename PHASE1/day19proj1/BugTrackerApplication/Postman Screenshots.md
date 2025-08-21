@@ -31,3 +31,13 @@
 ## delete operation access for ADMIN:
 
 <img width="1122" height="524" alt="Screenshot 2025-08-13 200905" src="https://github.com/user-attachments/assets/e4bec456-d67e-4eb6-934b-2195fbb21c28" />
+
+## token validations and generation:
+
+<img width="1118" height="583" alt="Screenshot 2025-08-20 123657" src="https://github.com/user-attachments/assets/a1ecf75b-247d-4db1-9e9d-6db7f25d5981" />
+
+<img width="1128" height="595" alt="Screenshot 2025-08-20 123706" src="https://github.com/user-attachments/assets/65e8582a-288d-49ae-860f-36b9783f8035" />
+
+<img width="1134" height="572" alt="Screenshot 2025-08-20 123717" src="https://github.com/user-attachments/assets/0092252b-8a0f-4fca-8e3f-954bd1fdb703" />
+
+<img width="882" height="547" alt="Screenshot 2025-08-20 125052" src="https://github.com/user-attachments/assets/4ba47013-f866-4422-9d35-ab9776bab715" />
