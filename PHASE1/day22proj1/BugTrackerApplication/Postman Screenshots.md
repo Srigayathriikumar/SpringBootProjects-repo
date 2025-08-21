@@ -41,3 +41,8 @@
 <img width="1882" height="891" alt="Screenshot 2025-08-21 125944" src="https://github.com/user-attachments/assets/213b7a83-2649-41ee-89c7-c9ee537a3f72" />
 
 <img width="1038" height="498" alt="Screenshot 2025-08-20 153101" src="https://github.com/user-attachments/assets/85b2464e-8583-4185-af00-dc2619bbf4c0" />
+
+## unit test outputs:
+
+<img width="1339" height="490" alt="Screenshot 2025-08-21 143905" src="https://github.com/user-attachments/assets/10b15d81-68a4-4ab5-85fa-1f164895cbed" />
+
