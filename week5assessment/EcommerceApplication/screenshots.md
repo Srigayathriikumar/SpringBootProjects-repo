@@ -1,5 +1,7 @@
 ### APIs SCREENSHOTS:
 
+---
+
 ## User screenshots:
 
 <img width="1125" height="809" alt="Screenshot 2025-08-23 195412" src="https://github.com/user-attachments/assets/2e59160d-82cc-41d0-8e4f-edcfe9ef0122" />
@@ -42,6 +44,24 @@ DELETE:
 
 <img width="1580" height="553" alt="Screenshot 2025-08-23 201215" src="https://github.com/user-attachments/assets/25c5a069-2bf4-453d-b9dc-93af8f5985c1" />
 
+## SpringBoot validation:
+
+<img width="1011" height="780" alt="image" src="https://github.com/user-attachments/assets/ff9b36ca-b185-4293-bc20-5e8acc437eda" />
+
+## Paging and sorting:
+
+<img width="1585" height="519" alt="Screenshot 2025-08-23 201141" src="https://github.com/user-attachments/assets/5859c513-39b0-4efb-9c82-cd19fe55ed04" />
+
+<img width="1580" height="553" alt="Screenshot 2025-08-23 201215" src="https://github.com/user-attachments/assets/5b38e723-d859-4080-b3ff-76ab7e94fec7" />
+
+<img width="1011" height="854" alt="Screenshot 2025-08-23 201844" src="https://github.com/user-attachments/assets/3c6ec24a-58e0-41df-b2f7-c027c85b4b56" />
+
+<img width="1586" height="784" alt="Screenshot 2025-08-23 201934" src="https://github.com/user-attachments/assets/20f9a0c3-6ec1-443c-9a41-24edd97c793a" />
+
+## Global Exception handler:
+
+<img width="1142" height="512" alt="image" src="https://github.com/user-attachments/assets/d9b5a46d-059a-4d2e-96f1-9ae212468469" />
+
 ## Jwt Authentication:
 
 <img width="1579" height="499" alt="Screenshot 2025-08-23 213603" src="https://github.com/user-attachments/assets/a687456c-ea8f-45fb-ae02-5a7a6e486fd1" />
@@ -55,3 +75,7 @@ DELETE:
 <img width="1457" height="489" alt="Screenshot 2025-08-23 203236" src="https://github.com/user-attachments/assets/5c5bbe88-7b88-45ec-94bc-f78fdbf86f3a" />
 
 <img width="1442" height="519" alt="Screenshot 2025-08-23 203258" src="https://github.com/user-attachments/assets/9ab9ab5c-173b-407e-a136-06b9b836eb1b" />
+
+## Swagger Output:
+
+<img width="1902" height="842" alt="image" src="https://github.com/user-attachments/assets/bc204c22-f5fa-40bb-a23e-a9871acad5f5" />
