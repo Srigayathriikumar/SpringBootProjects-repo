@@ -48,3 +48,10 @@ DELETE:
 
 <img width="799" height="362" alt="Screenshot 2025-08-23 213548" src="https://github.com/user-attachments/assets/679ed2ba-3283-4b3a-99e0-0799f8252e6e" />
 
+## Junit Tester:
+
+<img width="1449" height="539" alt="Screenshot 2025-08-23 203207" src="https://github.com/user-attachments/assets/5299a956-f28c-459f-be65-95ef040c28a0" />
+
+<img width="1457" height="489" alt="Screenshot 2025-08-23 203236" src="https://github.com/user-attachments/assets/5c5bbe88-7b88-45ec-94bc-f78fdbf86f3a" />
+
+<img width="1442" height="519" alt="Screenshot 2025-08-23 203258" src="https://github.com/user-attachments/assets/9ab9ab5c-173b-407e-a136-06b9b836eb1b" />
