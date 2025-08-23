@@ -59,5 +59,26 @@ public class OrderController {
         Page<OrderResponseDTO> response = orders.map(OrderMapper::toResponseDTO);
         return ResponseEntity.ok(response);
     }
+    
+    @GetMapping("/user/{userId}/date-range")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<List<OrderResponseDTO>> getUserOrdersByDateRange(
+            @PathVariable Long userId,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date start = sdf.parse(startDate);
+            java.util.Date end = sdf.parse(endDate);
+            
+            List<Order> orders = orderService.getUserOrdersByDateRange(userId, start, end);
+            List<OrderResponseDTO> response = orders.stream()
+                .map(OrderMapper::toResponseDTO)
+                .collect(Collectors.toList());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }

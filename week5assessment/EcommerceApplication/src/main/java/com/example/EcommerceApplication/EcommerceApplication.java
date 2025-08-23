@@ -17,14 +17,15 @@ public class EcommerceApplication {
 
 	@Bean
 	CommandLineRunner loadData(UserRepository userRepository, ProductRepository productRepository, 
-							   OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
+							   OrderRepository orderRepository, OrderItemRepository orderItemRepository,
+							   org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
 		return args -> {
 
-			User user1 = new User(null, "john_doe", "john@example.com", "USER", "password123");
-			User user2 = new User(null, "jane_smith", "jane@example.com", "ADMIN", "admin123");
-			User user3 = new User(null, "bob_wilson", "bob@example.com", "USER", "password456");
-			User user4 = new User(null, "alice_brown", "alice@example.com", "USER", "password789");
-			User user5 = new User(null, "mike_davis", "mike@example.com", "ADMIN", "admin456");
+			User user1 = new User(null, "john_doe", "john@example.com", "USER", passwordEncoder.encode("password123"));
+			User user2 = new User(null, "jane_smith", "jane@example.com", "ADMIN", passwordEncoder.encode("admin123"));
+			User user3 = new User(null, "bob_wilson", "bob@example.com", "USER", passwordEncoder.encode("password456"));
+			User user4 = new User(null, "alice_brown", "alice@example.com", "USER", passwordEncoder.encode("password789"));
+			User user5 = new User(null, "mike_davis", "mike@example.com", "ADMIN", passwordEncoder.encode("admin456"));
 			userRepository.save(user1);
 			userRepository.save(user2);
 			userRepository.save(user3);

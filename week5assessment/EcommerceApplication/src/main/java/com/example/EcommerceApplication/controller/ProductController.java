@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.example.EcommerceApplication.service.ProductService;
@@ -98,7 +99,7 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO requestDTO) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO requestDTO) {
         Product product = ProductMapper.toEntity(requestDTO);
         Product savedProduct = productService.saveProduct(product);
         return ResponseEntity.ok(ProductMapper.toResponseDTO(savedProduct));
