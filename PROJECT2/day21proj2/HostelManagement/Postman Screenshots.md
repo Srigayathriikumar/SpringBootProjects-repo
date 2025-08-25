@@ -43,5 +43,8 @@
 
 <img width="1119" height="365" alt="Screenshot 2025-08-13 204002" src="https://github.com/user-attachments/assets/ca3931b2-3dd3-41d3-a334-379cbea79aed" />
 
+## Swagger output:
+
+<img width="1899" height="841" alt="Screenshot 2025-08-25 181009" src="https://github.com/user-attachments/assets/d6e9c6df-d17a-4621-9d3d-9b4af0e2ef8c" />
 
 
